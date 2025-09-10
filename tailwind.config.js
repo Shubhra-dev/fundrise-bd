@@ -75,7 +75,7 @@ export default {
         //backgrounds
         'bg-primary': '#F9FAFB', // Base/Soft White
         'bg-primary-2': '#FAF3F0', // Base/Ivory Rose
-        'bg-secondary': '#F9FAFB', // Grey/50
+        'bg-secondary': '#F1F2F4', // Grey/50
         'bg-tertiary': '#F3F4F6', // Grey/100
         'bg-disabled': '#E5E7EB', // Grey/200
         'bg-alternative': '#FFFFFF', // Base/White
@@ -120,7 +120,7 @@ export default {
         'bg-blush-mist-light-dark': '#BB5160', // Blush Mist/700
         'bg-blush-mist-dark-dark': '#F8D9DB', // Blush Mist/200
         // ---- Border Colors (Light Mode) ----
-        'border-primary': '#D1D5DB', // Grey/300
+        'border-primary': '#A4AAB7', // Grey/300
         'border-secondary': '#9CA3AF', // Grey/400
         'border-tertiary': '#374151', // Grey/700
 
