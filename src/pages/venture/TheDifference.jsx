@@ -9,8 +9,8 @@ import SectionLayout from '../../ui/SectionLayout';
 function TheDifference() {
   return (
     <SectionLayout bg={`bg-bg-soft-orchid-light`}>
-      <div className="flex items-start justify-normal gap-24">
-        <div className="w-1/2">
+      <div className="flex flex-col tab:flex-row items-start justify-normal gap-24">
+        <div className="tab:w-1/2">
           <SubHeading extraClass={`uppercase`} tracking={`tracking-widest`}>
             the fundrise difference
           </SubHeading>
@@ -23,7 +23,7 @@ function TheDifference() {
             a distinct advantage in the crowded space of venture funding.
           </BodySmall>
         </div>
-        <div className="w-1/2 flex flex-col gap-[25px]">
+        <div className="tab:w-1/2 flex flex-col gap-[25px]">
           <FullshadowCard
             text={`Our decades of first-hand experience building and operating tech companies gives us a deep understanding of the daily challenges and trade-offs a growing company faces. With over 100 software engineers and product managers on staff, we have more software depth and expertise than most venture funds.`}
             title={`Technical expertise`}

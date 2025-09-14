@@ -26,7 +26,7 @@ export default {
 
         'btext-2-base': '#4B8198', // Cool Irish/500
         'btext-2-light': '#BCDDE6', // Cool Irish/200
-        'btext-2-dark': '#2D5461', // Cool Irish/700
+        'btext-2-dark': '#5673DC', // Cool Irish/700
 
         'btext-3-base': '#9A82A6', // Soft Orchid/500
         'btext-3-light': '#D7C8DE', // Soft Orchid/200
@@ -85,7 +85,7 @@ export default {
         'bg-dusky-plum-dark': '#352732', // Dusky Plum/800
 
         'bg-cool-irish-base': '#8197E5', // Cool Irish/500
-        'bg-cool-irish-light': '#D1E6EE', // Cool Irish/100
+        'bg-cool-irish-light': '#EAEDFB', // Cool Irish/100
         'bg-cool-irish-dark': '#385AD6', // Cool Irish/800
 
         'bg-soft-orchid-base': '#9A82A6', // Soft Orchid/500

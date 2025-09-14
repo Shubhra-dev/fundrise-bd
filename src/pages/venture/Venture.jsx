@@ -1,3 +1,4 @@
+import AddVenture from './AddVenture';
 import LogoContainer from './LogoContainer';
 import PortfolioCompanies from './PortfolioCompanies';
 import ServiceTitan from './ServiceTitan';
@@ -14,6 +15,7 @@ function Venture() {
       <PortfolioCompanies />
       <WhyVenture />
       <TheDifference />
+      <AddVenture />
     </>
   );
 }
