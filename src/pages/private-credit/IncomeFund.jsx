@@ -18,16 +18,40 @@ function IconBox({ img, text }) {
     </div>
   );
 }
+function TextBox({ textColor, prefix, postfix, text, title }) {
+  return (
+    <div className="p-5 bg-bg-alternative rounded-2xl outline outline-4 flex flex-col justify-between outline-offset-[-4px] outline-[#D5DCF6]">
+      <div>
+        <SubTitle align={`text-center`} textColor={textColor}>
+          <span className="text-btext-2-dark">{prefix}</span>
+          {title}
+          <span className="text-btext-2-dark">{postfix}</span>
+        </SubTitle>
+        <BodySmall align="text-center" extraClass={`mt-[5px]`}>
+          {text}
+        </BodySmall>
+      </div>
+    </div>
+  );
+}
 
 function IncomeFund() {
   return (
     <SectionLayout>
-      <div className="flex items-start justify-normal gap-3.5">
-        <div className="w-[28%]">
+      <div className="flex flex-col sm:flex-row items-start justify-normal gap-3.5">
+        <div className="w-full sm:w-[40%] tab:w-[28%]">
           <SubHeading extraClass={`uppercase`} tracking={`tracking-widest`}>
             Featured fund
           </SubHeading>
           <SubTitle textColor={`text-btext-2-dark`}>Income Fund</SubTitle>
+          <BodyBase extraClass={`sm:hidden mt-5`}>
+            Our Income Real Estate Fund is designed to deliver high current yields from a
+            diversified portfolio of our most favored real estate backed fixed income strategies,
+            which is primarily gap financing to stabilized and ground-up multifamily and to the
+            acquisition and development of housing in the Sunbelt. The Income Real Estate Fund is
+            also heavily focused on capitalizing on the current dislocation in real estate credit
+            markets, as described in depth by our Great Deleveraging thesis.
+          </BodyBase>
           <div className="mt-8">
             <SubHeading extraClass={`uppercase`} fontWeight={`font-semibold`}>
               Asset types
@@ -41,6 +65,26 @@ function IncomeFund() {
             </div>
           </div>
         </div>
+        <div className="w-full sm:w-[60%] tab:w-[72%]">
+          <BodyBase extraClass={`hidden sm:block`}>
+            Our Income Real Estate Fund is designed to deliver high current yields from a
+            diversified portfolio of our most favored real estate backed fixed income strategies,
+            which is primarily gap financing to stabilized and ground-up multifamily and to the
+            acquisition and development of housing in the Sunbelt. The Income Real Estate Fund is
+            also heavily focused on capitalizing on the current dislocation in real estate credit
+            markets, as described in depth by our Great Deleveraging thesis.
+          </BodyBase>
+          <div className="hidden tab:grid pt-14  grid-cols-3 items-stretch gap-10">
+            <TextBox text={`Annualized return since inception`} title={`7.6`} postfix={`%`} />
+            <TextBox text={`Net asset Value (NAV)`} title={`616`} prefix={`$`} postfix={`M`} />
+            <TextBox text={`Annualized distribution rate`} title={`7.51`} postfix={`%`} />
+          </div>
+        </div>
+      </div>
+      <div className="grid tab:hidden pt-14  sm:grid-cols-3 items-stretch gap-2.5 sm:gap-10">
+        <TextBox text={`Annualized return since inception`} title={`7.6`} postfix={`%`} />
+        <TextBox text={`Net asset Value (NAV)`} title={`616`} prefix={`$`} postfix={`M`} />
+        <TextBox text={`Annualized distribution rate`} title={`7.51`} postfix={`%`} />
       </div>
       <div className="mt-24 flex flex-col sm:flex-row items-center justify-normal gap-10 laptop:gap-[50px]">
         <img
