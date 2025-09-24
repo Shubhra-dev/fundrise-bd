@@ -15,7 +15,7 @@ function Heading({
       title={title}
       onClick={onClick ? onClick : () => {}}
       className={`text-[24px] sm:text-[28px] tab:text-[32px] ${fontWeight ? fontWeight : 'font-semibold'} ${
-        font ? font : 'font-sans'
+        font ? font : 'font-sora'
       } ${leading ? leading : 'leading-[130%]'} ${
         textColor ? textColor : 'text-heading dark:text-heading-dark'
       } ${align ? align : 'text-left'} ${tracking ? tracking : 'tracking-[-2%]'} ${extraClass ? extraClass : ''}`}

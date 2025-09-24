@@ -8,13 +8,16 @@ import SectionLayout from '../../ui/SectionLayout';
 import Image1 from '../../assets/Image1.jpg';
 import ProductCard from '../../components/card/ProductCard';
 
-function ExplorePortfolios() {
+function ExplorePortfolios({
+  markerColor = 'text-btext-2-dark',
+  markerColorBg = `bg-bg-cool-irish-base`,
+}) {
   const [status, setStatus] = useState(`active`);
   return (
     <SectionLayout>
       <div className="flex items-end justify-normal gap-16">
         <SubTitle extraClass={`w-[35%]`}>
-          Explore all projects in our <span className="text-btext-2-dark">portfolio</span>
+          Explore all projects in our <span className={`${markerColor}`}>portfolio</span>
         </SubTitle>
         <BodyBase extraClass={`w-[65%]`}>
           Here are the investments that are powering our investors’ returns.
@@ -25,12 +28,12 @@ function ExplorePortfolios() {
         <div className="bg-bg-cool-irish-light flex items-center rounded-md text-xs font-normal text-sub-heading">
           <div
             onClick={() => setStatus('active')}
-            className={`cursor-pointer ${status === 'active' ? 'bg-bg-cool-irish-base text-bg-alternative font-bold' : ''} py-2.5 px-5 rounded-md text-xs `}
+            className={`cursor-pointer ${status === 'active' ? `${markerColorBg} text-bg-alternative font-bold` : ''} py-2.5 px-5 rounded-md text-xs `}
           >
             Active
           </div>
           <div
-            className={`py-2.5 px-5 cursor-pointer ${status === 'completed' ? 'bg-bg-cool-irish-base text-bg-alternative font-bold' : ''} rounded-md`}
+            className={`py-2.5 px-5 cursor-pointer ${status === 'completed' ? `${markerColorBg} text-bg-alternative font-bold` : ''} rounded-md`}
             onClick={() => setStatus('completed')}
           >
             Completed
