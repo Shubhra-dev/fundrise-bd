@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import BodyBase from '../../components/text/BodyBase';
-import BodySmall from '../../components/text/BodySmall';
-import CaptionExtraSmall from '../../components/text/CaptionExtraSmall';
 import SubHeading from '../../components/text/SubHeading';
 import SubTitle from '../../components/text/SubTitle';
 import SectionLayout from '../../ui/SectionLayout';

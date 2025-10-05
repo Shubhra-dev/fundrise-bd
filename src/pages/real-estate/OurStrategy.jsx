@@ -111,27 +111,27 @@ function OurStrategy() {
       <TextAndImageSection
         imagePosition="left"
         subHeading={`Apartment`}
-        heading={`Build-for-rent`}
-        linkText={`Read more about our recent partnership with Saltbox`}
+        heading={`Multifamily apartments`}
+        linkText={`Read about our neighborhood renovation efforts in Bloomberg`}
         image1={RealEstateHeroBg}
         image2={RealEstateHeroBg}
-        text={`A variety of trends have now led to a good share of the population in need of more living space which they can rent for some time. Currently, this demand for single-family rentals (SFRs) has helped drive a level of asset price appreciation uncommon in the world of real estate. By purchasing these homes in volume directly from homebuilders and leasing them up ourselves as stabilized communities, we believe we can get better prices—and returns—than buying the “finished product.”`}
+        text={`With a boom in remote work and business-friendly local governments courting employers, more affordably-priced suburban apartment communities have generally experienced stable or growing demand. We’ve paid a lower price for these investments relative to their earnings, and expect a higher income yield in the near term, as well as the potential for greater appreciation over the long term to the extent that demand increases in the future.`}
       >
         <div className="flex items-center justify-normal gap-9">
-          <IconBox img={BuildingPurple} text={`Single-family homes`} count={`3,471`} />
+          <IconBox img={BuildingPurple} text={`Residential units`} count={`8,962`} />
           <IconBox img={ChartLinePurple} text={`U.S. Markets`} count={`30`} />
         </div>
       </TextAndImageSection>
       <TextAndImageSection
-        subHeading={`Apartment`}
-        heading={`Build-for-rent`}
+        subHeading={`Industry`}
+        heading={`Industrial properties`}
         linkText={`Read more about our recent partnership with Saltbox`}
         image1={RealEstateHeroBg}
         image2={RealEstateHeroBg}
-        text={`A variety of trends have now led to a good share of the population in need of more living space which they can rent for some time. Currently, this demand for single-family rentals (SFRs) has helped drive a level of asset price appreciation uncommon in the world of real estate. By purchasing these homes in volume directly from homebuilders and leasing them up ourselves as stabilized communities, we believe we can get better prices—and returns—than buying the “finished product.”`}
+        text={`Propelled by the popularity of e-Commerce, a growing need for logistical facilities and last-mile distribution centers near largely populated areas has made industrial space an attractive long-term investment. Our goal with these investments is to generate a consistent income from commercial tenants, and position ourselves to capture any appreciation in the value of these properties in supply-constrained areas.`}
       >
         <div className="flex items-center justify-normal gap-9">
-          <IconBox img={BuildingPurple} text={`Single-family homes`} count={`3,471`} />
+          <IconBox img={BuildingPurple} text={`Square feet for lease`} count={`2,310,800`} />
           <IconBox img={ChartLinePurple} text={`U.S. Markets`} count={`30`} />
         </div>
       </TextAndImageSection>
