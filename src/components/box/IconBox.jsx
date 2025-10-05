@@ -1,6 +1,5 @@
 import CaptionBase from '../text/CaptionBase';
 import BodyBase from '../text/BodyBase';
-import { SubTitle } from 'chart.js';
 
 function IconBox({ text, title, children, sign }) {
   return (
