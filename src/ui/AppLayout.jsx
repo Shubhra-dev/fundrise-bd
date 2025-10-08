@@ -42,6 +42,9 @@ function AppLayout() {
           <p onClick={() => navigate('/why-fundrise')} className="hover:underline cursor-pointer">
             Why Fundrise
           </p>
+          <p onClick={() => navigate('/how-it-works')} className="hover:underline cursor-pointer">
+            How It Works
+          </p>
         </div>
       </div>
       <div className="min-h-screen">

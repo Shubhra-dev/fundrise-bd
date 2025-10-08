@@ -16,7 +16,7 @@ function Title({
       className={`text-[32px] sm:text-[40px] tab:text-[50px] ${fontWeight ? fontWeight : 'font-bold'} ${
         font ? font : 'font-display'
       } ${leading ? leading : 'leading-[120%]'} ${
-        textColor ? textColor : 'text-title dark:text-title-dark'
+        textColor ? textColor : 'text-title'
       } ${align ? align : 'text-left'} ${extraClass ? extraClass : ''}`}
     >
       {children}

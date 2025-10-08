@@ -1,29 +1,31 @@
 import SectionLayout from '../../ui/SectionLayout';
-import InstituteScale from '../../assets/InstituteScale.jpg';
+import OurPlatformImg from '../../assets/OurPlatform.png';
 import SubHeading from '../../components/text/SubHeading';
 import SubTitle from '../../components/text/SubTitle';
 import BodySmall from '../../components/text/BodySmall';
 import { FiArrowUpRight } from 'react-icons/fi';
-function OurAsset() {
+function OurPlatform() {
   return (
     <SectionLayout bg={`bg-bg-secondary`}>
       <div className="flex flex-col sm:flex-row items-center justify-normal gap-10 laptop:gap-[50px]">
-        <div className="chamfer-tr-6 rounded-md p-2.5 sm:w-[30%] tab:w-[40%] bgLap:w-1/2 bg-bg-alternative">
-          <img
-            src={InstituteScale}
-            alt="hero image"
-            className=" rounded-md w-full chamfer-tr-6 h-60 sm:h-96"
-          />
-        </div>
+        <img
+          src={OurPlatformImg}
+          alt="hero image"
+          className="tab:w-[40%] rounded-md w-full h-60 sm:h-96"
+        />
+
         <div className="tab:w-[60%] bgLap:w-1/2">
           <SubHeading extraClass={`uppercase`} tracking={`tracking-widest`}>
-            our assets
+            our platform
           </SubHeading>
-          <SubTitle extraClass={`pt-[15px]`}>Institutional scale</SubTitle>
+          <SubTitle extraClass={`pt-[15px]`}>Your first investment is just the beginning.</SubTitle>
           <BodySmall fontWeight={`font-normal`} extraClass={`py-5`}>
-            Fundrise manages $7B+ of real estate* across the country on behalf of our hundreds of
-            thousands of investors. We deliver institutional quality access and scale through our
-            unique technology platform.
+            In less than 5 minutes, you can create an account, choose your portfolio strategy, and
+            complete your first investment. <br /> After you place your initial investment, we'll
+            keep working to add new assets to your portfolio over time — with no additional
+            investment required on your end. This means your already-diversified portfolio can
+            become stronger year after year. You can then continue making contributions manually or
+            set up recurring investments.
           </BodySmall>
           <div className="cursor-pointer flex items-center justify-normal gap-2">
             <BodySmall
@@ -31,7 +33,7 @@ function OurAsset() {
               textColor={`text-btext-2-dark`}
               font={`font-display`}
             >
-              <a href="">Explore all real estate assets</a>
+              <a href="">Learn more about your platform</a>
             </BodySmall>
             <FiArrowUpRight className="text-btext-2-dark font-bold" />
           </div>
@@ -41,4 +43,4 @@ function OurAsset() {
   );
 }
 
-export default OurAsset;
+export default OurPlatform;

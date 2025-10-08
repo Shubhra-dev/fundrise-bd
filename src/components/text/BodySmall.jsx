@@ -17,7 +17,7 @@ function BodySmall({
       className={`text-[16px] ${fontWeight ? fontWeight : 'font-normal'} ${
         font ? font : 'font-sans'
       } ${leading ? leading : 'leading-[150%]'} ${
-        textColor ? textColor : 'text-paragraph dark:text-paragraph-dark'
+        textColor ? textColor : 'text-paragraph'
       } ${align ? align : 'text-left'} ${tracking ? tracking : 'tracking-[-1%]'} ${extraClass ? extraClass : ''}`}
     >
       {children}

@@ -17,7 +17,7 @@ function CaptionBase({
       className={`text-[14px] ${fontWeight ? fontWeight : 'font-normal'} ${
         font ? font : 'font-sans'
       } ${leading ? leading : 'leading-[150%]'} ${
-        textColor ? textColor : 'text-caption dark:text-caption-dark'
+        textColor ? textColor : 'text-caption'
       } ${align ? align : 'text-left'} ${tracking ? tracking : 'tracking-[0%]'} ${extraClass ? extraClass : ''}`}
     >
       {children}
