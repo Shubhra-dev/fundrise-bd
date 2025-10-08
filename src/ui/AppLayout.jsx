@@ -20,7 +20,7 @@ function AppLayout() {
       <Toaster position="top-right" reverseOrder={false} />
       {/* <Header /> */}
       <div className="max-w-content bg-black w-full">
-        <div className="h-[65px] px-5 sm:px-8 smLap:px-0 smLap:w-10/12 laptop:w-9/12 m-auto text-base font-sora font-semibold text-white flex items-center gap-4 flex-wrap">
+        <div className="sm:h-[65px] px-5 sm:px-8 smLap:px-0 smLap:w-10/12 laptop:w-9/12 m-auto text-xs sm:text-base font-sora font-semibold text-white flex items-center gap-4 flex-wrap">
           <p onClick={() => navigate('/')} className="hover:underline cursor-pointer">
             Home
           </p>
@@ -35,6 +35,12 @@ function AppLayout() {
           </p>
           <p onClick={() => navigate('/client-return')} className="hover:underline cursor-pointer">
             Client Return
+          </p>
+          <p onClick={() => navigate('/help-center')} className="hover:underline cursor-pointer">
+            Help Center
+          </p>
+          <p onClick={() => navigate('/why-fundrise')} className="hover:underline cursor-pointer">
+            Why Fundrise
           </p>
         </div>
       </div>
