@@ -8,6 +8,7 @@ import ClientReturn from './pages/client-return/ClientReturn';
 import HelpCenter from './pages/help-center/HelpCenter';
 import WhyFundrise from './pages/why-fundrise/WhyFundrise';
 import HowItWorks from './pages/how-it-works/HowItWorks';
+import AboutUs from './pages/about-us/AboutUs';
 const router = createBrowserRouter([
   {
     element: <AppLayout />,
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
       { path: '/help-center', element: <HelpCenter /> },
       { path: '/why-fundrise', element: <WhyFundrise /> },
       { path: '/how-it-works', element: <HowItWorks /> },
+      { path: '/about-us', element: <AboutUs /> },
     ],
   },
 ]);
