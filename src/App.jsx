@@ -9,6 +9,8 @@ import HelpCenter from './pages/help-center/HelpCenter';
 import WhyFundrise from './pages/why-fundrise/WhyFundrise';
 import HowItWorks from './pages/how-it-works/HowItWorks';
 import AboutUs from './pages/about-us/AboutUs';
+import ProductDetails from './pages/product-details/ProductDetails';
+import LettersToInvestor from './pages/letters-investor/LettersToInvestor';
 const router = createBrowserRouter([
   {
     element: <AppLayout />,
@@ -22,6 +24,8 @@ const router = createBrowserRouter([
       { path: '/why-fundrise', element: <WhyFundrise /> },
       { path: '/how-it-works', element: <HowItWorks /> },
       { path: '/about-us', element: <AboutUs /> },
+      { path: '/product/details/:prod_id', element: <ProductDetails /> },
+      { path: '/letters-to-investor', element: <LettersToInvestor /> },
     ],
   },
 ]);
