@@ -22,7 +22,7 @@ function LettersToInvestor() {
               className="w-full sm:w-[45%] tab:first-letter:w-1/2 object-cover h-60 sm:h-48 tab:h-80"
             />
             <div
-              className={`w-full sm:w-[55%] tab:first-letter:w-1/2 ${index % 2 === 0 ? 'sm:pr-8 tab:pr-14' : 'sm:pl-8 tab:pl-14'}`}
+              className={`w-full sm:w-[55%] tab:w-1/2 ${index % 2 === 0 ? 'sm:pr-8 tab:pr-14' : 'sm:pl-8 tab:pl-14'}`}
             >
               <h2 className="text-2xl sm:text-xl tab:text-3xl font-semibold font-sora">
                 Outperformance amidst market uncertainty
