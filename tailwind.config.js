@@ -74,7 +74,7 @@ export default {
         'info-dark': '#60A5FA', // Blue/300
         //backgrounds
         'bg-primary': '#F9FAFB', // Base/Soft White
-        'bg-primary-2': '#FAF3F0', // Base/Ivory Rose
+        'bg-primary-2': '#FAF7F8', // Base/Ivory Rose
         'bg-secondary': '#F1F2F4', // Grey/50
         'bg-tertiary': '#F3F4F6', // Grey/100
         'bg-disabled': '#E5E7EB', // Grey/200
@@ -186,6 +186,7 @@ export default {
         bgLap: '1300px',
         laptop: '1285px',
         content: '1750px',
+        dashboard: '1850px',
       },
     },
   },

@@ -12,6 +12,9 @@ import AboutUs from './pages/about-us/AboutUs';
 import ProductDetails from './pages/product-details/ProductDetails';
 import LettersToInvestor from './pages/letters-investor/LettersToInvestor';
 import LetterToInvestorDetails from './pages/letter-to-investor-details/LetterToInvestorDetails';
+import UserDashboard from './pages/user-dashboard/UserdashBoard';
+import UserPortfolio from './pages/user-portfolio/UserPortfolio';
+
 const router = createBrowserRouter([
   {
     element: <AppLayout />,
@@ -29,6 +32,14 @@ const router = createBrowserRouter([
       { path: '/letters-to-investor', element: <LettersToInvestor /> },
       { path: '/letters-to-investor/details/:letter_id', element: <LetterToInvestorDetails /> },
     ],
+  },
+  {
+    element: <UserDashboard />,
+    path: '/user/dashboard',
+  },
+  {
+    element: <UserPortfolio />,
+    path: '/user/portfolio',
   },
 ]);
 

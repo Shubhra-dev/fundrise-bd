@@ -15,30 +15,30 @@ function BetterPortfolio() {
             <SubHeading fontWeight={`font-normal`} textColor={`text-white`}>
               Low Fees
             </SubHeading>
-            <div class="w-2.5 h-2.5 bg-bg-cool-irish-base rounded-[3px]"></div>
+            <div className="w-2.5 h-2.5 bg-bg-cool-irish-base rounded-[3px]"></div>
             <SubHeading fontWeight={`font-normal`} textColor={`text-white`}>
               Flexible minimums
             </SubHeading>
-            <div class="w-2.5 h-2.5 bg-bg-cool-irish-base rounded-[3px]"></div>
+            <div className="w-2.5 h-2.5 bg-bg-cool-irish-base rounded-[3px]"></div>
             <SubHeading fontWeight={`font-normal`} textColor={`text-white`}>
               Quarterly liquidity
             </SubHeading>
           </div>
           <div className="mt-2.5 flex flex-col gap-4 sm:hidden">
             <div className="flex gap-5 items-center">
-              <div class="w-2.5 h-2.5 bg-bg-cool-irish-base rounded-[3px]"></div>
+              <div className="w-2.5 h-2.5 bg-bg-cool-irish-base rounded-[3px]"></div>
               <SubHeading fontWeight={`font-normal`} textColor={`text-white`}>
                 Low Fees
               </SubHeading>
             </div>
             <div className="flex gap-5 items-center">
-              <div class="w-2.5 h-2.5 bg-bg-cool-irish-base rounded-[3px]"></div>
+              <div className="w-2.5 h-2.5 bg-bg-cool-irish-base rounded-[3px]"></div>
               <SubHeading fontWeight={`font-normal`} textColor={`text-white`}>
                 Flexible minimums
               </SubHeading>
             </div>
             <div className="flex gap-5 items-center">
-              <div class="w-2.5 h-2.5 bg-bg-cool-irish-base rounded-[3px]"></div>
+              <div className="w-2.5 h-2.5 bg-bg-cool-irish-base rounded-[3px]"></div>
               <SubHeading fontWeight={`font-normal`} textColor={`text-white`}>
                 Quarterly liquidity
               </SubHeading>

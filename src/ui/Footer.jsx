@@ -151,14 +151,14 @@ function Footer() {
             >
               Terms of Service
             </CaptionExtraSmall>
-            <div class="w-1.5 h-1.5 bg-bg-dusky-plum-base rounded-sm"></div>
+            <div className="w-1.5 h-1.5 bg-bg-dusky-plum-base rounded-sm"></div>
             <CaptionExtraSmall
               textColor={`text-sub-title`}
               extraClass={`cursor-pointer hover:underline`}
             >
               Privacy Policy
             </CaptionExtraSmall>
-            <div class="w-1.5 h-1.5 bg-bg-dusky-plum-base rounded-sm"></div>
+            <div className="w-1.5 h-1.5 bg-bg-dusky-plum-base rounded-sm"></div>
             <CaptionExtraSmall
               textColor={`text-sub-title`}
               extraClass={`cursor-pointer hover:underline`}
