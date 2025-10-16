@@ -89,7 +89,7 @@ function DashboardLayout({ activeTab = 1, children }) {
               className={`${activeTab === 2 ? 'text-btext-2-dark' : 'text-paragraph'} text-xl`}
             />
           </MenuItem>
-          <MenuItem name={`Invest`} active={activeTab === 3}>
+          <MenuItem link={`/user/invests`} name={`Invest`} active={activeTab === 3}>
             <PiChartLineBold
               className={`${activeTab === 3 ? 'text-btext-2-dark' : 'text-paragraph'} text-xl`}
             />

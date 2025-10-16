@@ -14,6 +14,7 @@ import LettersToInvestor from './pages/letters-investor/LettersToInvestor';
 import LetterToInvestorDetails from './pages/letter-to-investor-details/LetterToInvestorDetails';
 import UserDashboard from './pages/user-dashboard/UserdashBoard';
 import UserPortfolio from './pages/user-portfolio/UserPortfolio';
+import UserInvests from './pages/user-invests/UserInvests';
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     element: <UserPortfolio />,
     path: '/user/portfolio',
+  },
+  {
+    element: <UserInvests />,
+    path: '/user/invests',
   },
 ]);
 

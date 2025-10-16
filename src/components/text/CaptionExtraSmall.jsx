@@ -14,7 +14,7 @@ function CaptionExtraSmall({
     <h1
       title={title}
       onClick={onClick ? onClick : () => {}}
-      className={`text-[10px] ${fontWeight ? fontWeight : 'font-normal'} ${
+      className={`text-[12px] ${fontWeight ? fontWeight : 'font-normal'} ${
         font ? font : 'font-sans'
       } ${leading ? leading : 'leading-[150%]'} ${
         textColor ? textColor : 'text-caption'
