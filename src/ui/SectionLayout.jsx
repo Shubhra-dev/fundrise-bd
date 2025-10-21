@@ -23,7 +23,7 @@ function SectionLayout({
       )}
 
       {/* Content Wrapper */}
-      <div className={`relative ${rounded} max-w-screen-content m-auto ${innerBg ? innerBg : ''}`}>
+      <div className={`relative ${rounded} max-w-screen-content mx-auto ${innerBg ? innerBg : ''}`}>
         <div
           className={`px-5 sm:px-8 smLap:px-0 smLap:w-10/12 laptop:w-9/12 m-auto ${
             padding ? padding : 'py-12 sm:py-16 tab:py-24'

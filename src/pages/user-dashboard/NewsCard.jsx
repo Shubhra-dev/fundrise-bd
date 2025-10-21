@@ -6,7 +6,9 @@ function NewsCard({ image, title, starCount, strategy, badge, summary, imageAlt 
     <div
       className={`relative flex ${badge === 'Feature Update' ? `bg-bg-primary-2` : badge === 'New Acquisition' ? 'bg-bg-blush-mist-light' : ' border border-border-primary'} w-full items-stretch justify-normal gap-6 rounded-[10px]`}
     >
-      <img src={image} alt={imageAlt} className="w-[30%] object-cover h-48 rounded-l-[10px]" />
+      <div className="relative w-[30%] min-h-48 overflow-hidden rounded-l-[10px]">
+        <img src={image} alt={imageAlt} className="absolute inset-0 h-full w-full object-cover" />
+      </div>
       <div className="py-5 pr-5 rounded-r-[10px] w-[70%] flex-1 flex flex-col justify-between min-w-0">
         <div>
           <div

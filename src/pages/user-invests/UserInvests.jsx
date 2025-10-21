@@ -20,8 +20,8 @@ function UserInvests() {
   const [amount, setAmount] = useState('');
   return (
     <DashboardLayout activeTab={3}>
-      <div className="w-full flex flex-col sm:flex-row items-start justify-normal gap-8">
-        <div className="w-[60%]">
+      <div className="w-full flex flex-col tab:flex-row items-start justify-normal gap-8">
+        <div className="w-full tab:w-[60%]">
           <div className="border border-border-primary rounded-xl p-5">
             <BodyBase textColor={`text-sub-heading`}>Invest in your plan</BodyBase>
             <div className="mt-5 relative">
@@ -58,7 +58,7 @@ function UserInvests() {
             </div>
           </div>
         </div>
-        <div className="w-[40%]">
+        <div className="w-full tab:w-[40%]">
           <div className="border border-border-primary rounded-xl p-5">
             <div className="flex items-center justify-between">
               <BodyBase textColor={`text-sub-heading`}>Invest in a fund</BodyBase>

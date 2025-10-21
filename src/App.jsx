@@ -15,6 +15,14 @@ import LetterToInvestorDetails from './pages/letter-to-investor-details/LetterTo
 import UserDashboard from './pages/user-dashboard/UserdashBoard';
 import UserPortfolio from './pages/user-portfolio/UserPortfolio';
 import UserInvests from './pages/user-invests/UserInvests';
+import UserTransaction from './pages/user-transactions/UserTransaction';
+import UserNewsFeed from '@/pages/user-newsfeed/UserNewsFeed';
+import Calculator from '@/pages/user-calculator/Calculator';
+import BrowseInvests from '@/pages/user-browse-invests/BrowseInvests';
+import InvestmentDetails from '@/pages/user-invests-details/InvestmentDetails';
+import ProtectedRoute from '@/ProtectedRoute';
+import Login from '@/pages/login/Login';
+import Registration from '@/pages/reguistration/Registration';
 
 const router = createBrowserRouter([
   {
@@ -34,17 +42,71 @@ const router = createBrowserRouter([
       { path: '/letters-to-investor/details/:letter_id', element: <LetterToInvestorDetails /> },
     ],
   },
+  { path: '/auth/login', element: <Login /> },
+  { path: '/auth/register', element: <Registration /> },
   {
-    element: <UserDashboard />,
+    element: (
+      <ProtectedRoute>
+        <UserDashboard />
+      </ProtectedRoute>
+    ),
     path: '/user/dashboard',
   },
   {
-    element: <UserPortfolio />,
+    element: (
+      <ProtectedRoute>
+        <UserPortfolio />
+      </ProtectedRoute>
+    ),
     path: '/user/portfolio',
   },
   {
-    element: <UserInvests />,
+    element: (
+      <ProtectedRoute>
+        <UserInvests />
+      </ProtectedRoute>
+    ),
     path: '/user/invests',
+  },
+  {
+    element: (
+      <ProtectedRoute>
+        <UserTransaction />
+      </ProtectedRoute>
+    ),
+    path: '/user/transactions',
+  },
+  {
+    element: (
+      <ProtectedRoute>
+        <UserNewsFeed />
+      </ProtectedRoute>
+    ),
+    path: '/user/newsfeed',
+  },
+  {
+    element: (
+      <ProtectedRoute>
+        <Calculator />
+      </ProtectedRoute>
+    ),
+    path: '/user/calculator',
+  },
+  {
+    element: (
+      <ProtectedRoute>
+        <BrowseInvests />
+      </ProtectedRoute>
+    ),
+    path: '/user/browse-invests',
+  },
+  {
+    element: (
+      <ProtectedRoute>
+        <InvestmentDetails />
+      </ProtectedRoute>
+    ),
+    path: '/user/browse-invests/details/:invest_id',
   },
 ]);
 

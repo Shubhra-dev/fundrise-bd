@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* globals.css */
+.react-datepicker-wrapper,
+.react-datepicker__input-container {
+  width: 100%;
+}
+
 /* Custom global styles */
 body {
   @apply font-sans text-gray-800;

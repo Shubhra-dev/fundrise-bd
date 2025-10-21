@@ -94,7 +94,7 @@ function DashboardLayout({ activeTab = 1, children }) {
               className={`${activeTab === 3 ? 'text-btext-2-dark' : 'text-paragraph'} text-xl`}
             />
           </MenuItem>
-          <MenuItem name={`Transactions`} active={activeTab === 4}>
+          <MenuItem link={`/user/transactions`} name={`Transactions`} active={activeTab === 4}>
             <RiArrowLeftRightFill
               className={`${activeTab === 4 ? 'text-btext-2-dark' : 'text-paragraph'} text-xl`}
             />
@@ -105,7 +105,7 @@ function DashboardLayout({ activeTab = 1, children }) {
       <div className="mt-10">
         <CaptionSmall extraClass={`uppercase px-7 py-2.5`}>Menu</CaptionSmall>
         <div className="mt-1.5" onClick={handleMenuClick}>
-          <MenuItem name={`Newsfeed`} active={activeTab === 5}>
+          <MenuItem link={`/user/newsfeed`} name={`Newsfeed`} active={activeTab === 5}>
             <CgFeed
               className={`${activeTab === 5 ? 'text-btext-2-dark' : 'text-paragraph'} text-xl`}
             />
@@ -120,12 +120,12 @@ function DashboardLayout({ activeTab = 1, children }) {
               className={`${activeTab === 7 ? 'text-btext-2-dark' : 'text-paragraph'} text-xl`}
             />
           </MenuItem>
-          <MenuItem name={`Calculator`} active={activeTab === 8}>
+          <MenuItem link={`/user/calculator`} name={`Calculator`} active={activeTab === 8}>
             <BiCalculator
               className={`${activeTab === 8 ? 'text-btext-2-dark' : 'text-paragraph'} text-xl`}
             />
           </MenuItem>
-          <MenuItem name={`Browse Invests`} active={activeTab === 9}>
+          <MenuItem link={`/user/browse-invests`} name={`Browse Invests`} active={activeTab === 9}>
             <HiOutlineChartBar
               className={`${activeTab === 9 ? 'text-btext-2-dark' : 'text-paragraph'} text-xl`}
             />
@@ -240,7 +240,7 @@ function DashboardLayout({ activeTab = 1, children }) {
               </div>
             </div>
           </div>
-          {children}
+          <div className="pt-8">{children}</div>
         </main>
       </div>
     </div>

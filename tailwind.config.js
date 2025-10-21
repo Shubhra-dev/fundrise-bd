@@ -34,7 +34,7 @@ export default {
 
         'btext-4-base': '#E4979E', // Blush Mist/500
         'btext-4-light': '#F8D9DB', // Blush Mist/200
-        'btext-4-dark': '#BB5160', // Blush Mist/700
+        'btext-4-dark': '#EC9394', // Blush Mist/700
 
         // Dark Mode
         'title-dark': '#FFFFFF', // Base/White
