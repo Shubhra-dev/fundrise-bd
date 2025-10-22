@@ -2,12 +2,21 @@ import { useEffect, useRef, useState } from 'react';
 import MobileOtpSvg from '@assets/MobileOtp.png';
 import SubHeading from '@/components/text/SubHeading';
 import RoundedButton from '@/components/buttons/RoundedButton';
+import {
+  emailVerify,
+  emailVerifyForgotPassword,
+  otpVerify,
+  otpVerifyForgotPassword,
+} from '@/services/authenticationAPIs';
+import CaptionExtraSmall from '@/components/text/CaptionExtraSmall';
 
-export default function OtpVerification({ email, onPrev, onSuccess }) {
-  const [values, setValues] = useState(['', '', '', '', '', '']);
+export default function OtpVerification({ email, onPrev, setCurrentPage, type }) {
+  const [values, setValues] = useState(type == 'fp' ? ['', '', '', ''] : ['', '', '', '', '', '']);
   const inputsRef = useRef([]);
   const [resendTimer, setResendTimer] = useState(60);
   const [sending, setSending] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({ state: false, message: '' });
 
   useEffect(() => {
     inputsRef.current[0]?.focus();
@@ -54,21 +63,73 @@ export default function OtpVerification({ email, onPrev, onSuccess }) {
   const handleResend = async () => {
     if (resendTimer > 0) return;
     setSending(true);
-    // simulate API
-    await new Promise((r) => setTimeout(r, 800));
-    setSending(false);
-    setResendTimer(60);
+    try {
+      const response = await emailVerify(email);
+      console.log(response);
+      setResendTimer(60);
+    } catch (error) {
+      alert(error.message || 'Resend failed. Please try again.');
+    } finally {
+      setSending(false);
+    }
+  };
+  const handleResendFp = async () => {
+    if (resendTimer > 0) return;
+    setSending(true);
+    try {
+      const response = await emailVerifyForgotPassword(email);
+      console.log(response);
+      setResendTimer(60);
+    } catch (error) {
+      alert(error.message || 'Resend failed. Please try again.');
+    } finally {
+      setSending(false);
+    }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     const code = values.join('');
     if (code.length < 6) return alert('Please enter full 6 digit code');
     // simulate verify
-    setSending(true);
-    setTimeout(() => {
-      setSending(false);
-      onSuccess && onSuccess(code);
-    }, 800);
+    setLoading(true);
+    setError({ state: false, message: '' });
+    try {
+      const response = await otpVerify(email, code);
+      console.log(response);
+      setCurrentPage(3);
+    } catch (error) {
+      setError({
+        state: true,
+        message: error.message || 'Email verification failed. Please try again.',
+      });
+      setTimeout(() => {
+        setError({ state: false, message: '' });
+      }, 3000);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleFpOtp = async () => {
+    const code = values.join('');
+    if (code.length < 4) return alert('Please enter full 6 digit code');
+    // simulate verify
+    setLoading(true);
+    setError({ state: false, message: '' });
+    try {
+      const response = await otpVerifyForgotPassword(email, code);
+      console.log(response);
+      setCurrentPage(3);
+    } catch (error) {
+      setError({
+        state: true,
+        message: error.message || 'Email verification failed. Please try again.',
+      });
+      setTimeout(() => {
+        setError({ state: false, message: '' });
+      }, 3000);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -89,8 +150,8 @@ export default function OtpVerification({ email, onPrev, onSuccess }) {
         </SubHeading>
 
         <p className="text-center text-sm text-paragraph max-w-xs">
-          We sent a 6-digit code to your email <span className="font-medium">{email}</span>. Enter
-          the code below to continue.
+          We sent a {type == 'fp' ? '4' : '6'}-digit code to your email{' '}
+          <span className="font-medium">{email}</span>. Enter the code below to continue.
         </p>
 
         <div className="mt-6 flex items-center justify-center gap-2 sm:gap-3" onPaste={onPaste}>
@@ -112,14 +173,20 @@ export default function OtpVerification({ email, onPrev, onSuccess }) {
         <div className="mt-3 text-sm text-center text-caption">
           Didn’t receive the code?{' '}
           <button
-            onClick={handleResend}
+            onClick={type == 'fp' ? handleResendFp : handleResend}
             className={`ml-1 font-medium ${resendTimer === 0 ? 'text-btext-1-base' : 'text-disable'}`}
             disabled={resendTimer !== 0}
           >
-            {resendTimer === 0 ? 'Resend code' : `Resend in ${resendTimer}s`}
+            {sending ? 'Sending' : resendTimer === 0 ? 'Resend code' : `Resend in ${resendTimer}s`}
           </button>
         </div>
-
+        {error.state && (
+          <div className="mt-3 bg-red-200 py-2 px-3 rounded-md border-l-4 border-l-red-500">
+            <CaptionExtraSmall textColor={`text-red-700`} align={`text-center`}>
+              {error.message}
+            </CaptionExtraSmall>
+          </div>
+        )}
         <div className="mt-6 w-full grid grid-cols-2 gap-3">
           <RoundedButton
             type="button"
@@ -129,8 +196,8 @@ export default function OtpVerification({ email, onPrev, onSuccess }) {
           />
           <RoundedButton
             type="button"
-            onClick={handleNext}
-            label={sending ? 'Processing...' : 'Next'}
+            onClick={type === 'fp' ? handleFpOtp : handleNext}
+            label={loading ? 'Processing...' : 'Next'}
             bg="bg-bg-dusky-plum-base"
           />
         </div>

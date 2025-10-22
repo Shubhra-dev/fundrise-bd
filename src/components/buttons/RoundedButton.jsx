@@ -12,10 +12,12 @@ export default function RoundedButton({
   border = '',
   textSize = 'text-base',
   onClick,
+  type = 'button',
   textColor = 'text-white group-hover:text-white',
 }) {
   return (
     <button
+      type={type}
       onClick={onClick ? onClick : () => {}}
       className={`${border} ${width} ${padding} group ${bg} ${hoverBg} ${rounded} inline-flex justify-center items-center gap-1.5`}
     >

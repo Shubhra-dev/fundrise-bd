@@ -22,7 +22,8 @@ import BrowseInvests from '@/pages/user-browse-invests/BrowseInvests';
 import InvestmentDetails from '@/pages/user-invests-details/InvestmentDetails';
 import ProtectedRoute from '@/ProtectedRoute';
 import Login from '@/pages/login/Login';
-import Registration from '@/pages/reguistration/Registration';
+import Registration from '@/pages/registration/Registration';
+import ForgotPassword from '@/pages/forgot-pasword/ForgotPassword';
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,7 @@ const router = createBrowserRouter([
   },
   { path: '/auth/login', element: <Login /> },
   { path: '/auth/register', element: <Registration /> },
+  { path: '/auth/forgot-password', element: <ForgotPassword /> },
   {
     element: (
       <ProtectedRoute>

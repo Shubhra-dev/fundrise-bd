@@ -3,6 +3,8 @@ import { HiEye, HiEyeOff, HiCheck } from 'react-icons/hi';
 import RoundedButton from '@/components/buttons/RoundedButton';
 import SubHeading from '@/components/text/SubHeading';
 import CaptionExtraSmall from '@/components/text/CaptionExtraSmall';
+import { passwordReset, registrationRequest } from '@/services/authenticationAPIs';
+import { useNavigate } from 'react-router-dom';
 
 const rulesList = [
   {
@@ -37,31 +39,66 @@ const rulesList = [
   },
 ];
 
-export default function PasswordSetup({ userData, onPrev, onSuccess }) {
-  const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
+export default function PasswordSetup({ userData, setUserdata, onPrev, type }) {
   const [showPwd, setShowPwd] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [focused, setFocused] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState({ state: false, message: '' });
+  const from = location.state?.from?.pathname || '/';
+  const navigate = useNavigate();
 
   const results = useMemo(() => {
     const res = {};
-    rulesList.forEach((r) => (res[r.id] = r.test(password)));
+    rulesList.forEach((r) => (res[r.id] = r.test(userData.password)));
     return res;
-  }, [password]);
+  }, [userData.password]);
 
   const allValid = Object.values(results).every(Boolean);
-  const passwordsMatch = password.length > 0 && password === confirm;
+  const passwordsMatch =
+    userData.password.length > 0 && userData.password === userData.password_confirmation;
 
-  const handleNext = async () => {
-    if (!allValid) return alert('Please satisfy all password rules');
-    if (!passwordsMatch) return alert('Passwords do not match');
+  const handleNext = async (e) => {
+    e.preventDefault();
+    if (!allValid) return setError({ state: true, message: 'Please satisfy all password rules' });
     setSubmitting(true);
-    // simulate save
-    await new Promise((r) => setTimeout(r, 700));
-    setSubmitting(false);
-    onSuccess && onSuccess(password);
+    setError({ state: false, message: '' });
+    try {
+      const response = await registrationRequest(userData);
+      console.log(response);
+      navigate(from, { replace: true });
+    } catch (error) {
+      setError({
+        state: true,
+        message: error.message || 'Email verification failed. Please try again.',
+      });
+      setTimeout(() => {
+        setError({ state: false, message: '' });
+      }, 3000);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+  const handleResetPasswordFp = async (e) => {
+    e.preventDefault();
+    if (!allValid) return setError({ state: true, message: 'Please satisfy all password rules' });
+    setSubmitting(true);
+    setError({ state: false, message: '' });
+    try {
+      const response = await passwordReset(userData);
+      console.log(response);
+      navigate('/auth/login');
+    } catch (error) {
+      setError({
+        state: true,
+        message: error.message || 'Email verification failed. Please try again.',
+      });
+      setTimeout(() => {
+        setError({ state: false, message: '' });
+      }, 3000);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -74,7 +111,7 @@ export default function PasswordSetup({ userData, onPrev, onSuccess }) {
           align={`text-left`}
           font={`font-display`}
         >
-          Create a password
+          {(type = 'fp' ? 'Reset your password' : 'Create a password')}
         </SubHeading>
 
         <CaptionExtraSmall textColor={`text-paragraph`}>
@@ -82,15 +119,19 @@ export default function PasswordSetup({ userData, onPrev, onSuccess }) {
           below.
         </CaptionExtraSmall>
 
-        <div className="space-y-2 mt-4">
+        <form
+          onSubmit={type === 'fp' ? handleResetPasswordFp : handleNext}
+          className="space-y-2 mt-4"
+        >
           <div className="relative">
             <input
               type={showPwd ? 'text' : 'password'}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={userData.password}
+              onChange={(e) => setUserdata({ ...userData, password: e.target.value })}
               onFocus={() => setFocused(true)}
               onBlur={() => setFocused(false)}
               placeholder="Password"
+              required
               className="w-full rounded-md border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:outline-none"
             />
             <button
@@ -106,7 +147,7 @@ export default function PasswordSetup({ userData, onPrev, onSuccess }) {
           {/* Rules checklist - visible when focused or when some rules are satisfied */}
           <div
             className={`grid grid-cols-2 gap-2 p-2 rounded-md bg-bg-primary-2 transition-all ${
-              focused || password ? 'opacity-100' : 'opacity-0 max-h-0 overflow-hidden'
+              focused || userData.password ? 'opacity-100' : 'opacity-0 max-h-0 overflow-hidden'
             }`}
           >
             {rulesList.map((r) => (
@@ -130,9 +171,10 @@ export default function PasswordSetup({ userData, onPrev, onSuccess }) {
           <div className="relative">
             <input
               type={showConfirm ? 'text' : 'password'}
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
+              value={userData.password_confirmation}
+              onChange={(e) => setUserdata({ ...userData, password_confirmation: e.target.value })}
               placeholder="Confirm password"
+              required
               className="w-full rounded-md border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:outline-none"
             />
             <button
@@ -146,7 +188,7 @@ export default function PasswordSetup({ userData, onPrev, onSuccess }) {
           </div>
 
           <div className="">
-            {confirm.length > 0 && (
+            {userData.password_confirmation.length > 0 && (
               <div
                 className={`text-xs text-center ${passwordsMatch ? 'text-success' : 'text-red-500'}`}
               >
@@ -154,6 +196,13 @@ export default function PasswordSetup({ userData, onPrev, onSuccess }) {
               </div>
             )}
           </div>
+          {error.state && (
+            <div className="mt-3 bg-red-200 py-2 px-3 rounded-md border-l-4 border-l-red-500">
+              <CaptionExtraSmall textColor={`text-red-700`} align={`text-center`}>
+                {error.message}
+              </CaptionExtraSmall>
+            </div>
+          )}
 
           <div className="mt-4 grid grid-cols-2 gap-3">
             <RoundedButton
@@ -163,13 +212,12 @@ export default function PasswordSetup({ userData, onPrev, onSuccess }) {
               onClick={onPrev}
             />
             <RoundedButton
-              type="button"
+              type="submit"
               label={submitting ? 'Processing...' : 'Next'}
               bg="bg-bg-dusky-plum-base"
-              onClick={handleNext}
             />
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
