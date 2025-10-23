@@ -64,9 +64,9 @@ const router = createBrowserRouter([
   },
   {
     element: (
-      <ProtectedRoute>
-        <UserInvests />
-      </ProtectedRoute>
+      <UserInvests />
+      // <ProtectedRoute>
+      // </ProtectedRoute>
     ),
     path: '/user/invests',
   },
