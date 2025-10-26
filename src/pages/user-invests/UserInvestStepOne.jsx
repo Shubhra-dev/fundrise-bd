@@ -39,7 +39,12 @@ function UserInvestStepOne({ amount, setAmount, setCurrentPage }) {
               <AmountButton amount={`$2000`} onClick={() => setAmount(`2000`)} />
             </div>
             <div className="mt-9">
-              <RoundedButton bg="bg-btext-3-dark" label="Continue" rounded="rounded-md" />
+              <RoundedButton
+                onClick={() => setCurrentPage(2)}
+                bg="bg-btext-3-dark"
+                label="Continue"
+                rounded="rounded-md"
+              />
             </div>
           </div>
           <div className="border border-border-primary rounded-xl p-5 mt-5">

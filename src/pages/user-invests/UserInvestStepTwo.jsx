@@ -84,7 +84,7 @@ const projects = [
   },
 ];
 
-export default function UserInvestStepTwo({ setCurrentPage }) {
+export default function UserInvestStepTwo({ setCurrentPage, onContinue }) {
   const [selected, setSelected] = useState([]); // array of titles
 
   const byTitle = useMemo(() => new Set(selected), [selected]);
@@ -99,18 +99,18 @@ export default function UserInvestStepTwo({ setCurrentPage }) {
 
   return (
     <div>
-      <div className="flex items-center justify-normal gap-12">
-        <BodyBase textColor="text-sub-heading" extraClass="w-[35%]">
+      <div className="flex flex-col sm:flex-row items-center justify-normal gap-12">
+        <BodyBase textColor="text-sub-heading" extraClass="w-full sm:w-[35%]">
           PROJECTS open for investment
         </BodyBase>
-        <div className="grid grid-cols-3 w-[65%] items-center justify-normal gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 w-full sm:w-[65%] items-center justify-normal gap-5">
           <SelectInput name="Company" />
           <SelectInput name="Project Type" />
           <SelectInput name="Location" />
         </div>
       </div>
 
-      <div className="mt-10 grid grid-cols-2 items-stretch justify-normal gap-5">
+      <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 items-stretch justify-normal gap-5">
         {projects.map((project) => (
           <ProjectCard
             key={project.title}
@@ -132,7 +132,15 @@ export default function UserInvestStepTwo({ setCurrentPage }) {
           </div>
         </div>
       </div>
-      <RoundedButton label="Continue" bg="bg-bg-dusky-plum-base my-5" rounded="rounded-md" />
+      <RoundedButton
+        label="Continue"
+        bg="bg-bg-dusky-plum-base my-5"
+        rounded="rounded-md"
+        onClick={() => {
+          // provide selected projects to parent and move forward
+          onContinue?.(selectedProjects);
+        }}
+      />
       <div className="mt-10 py-5 border-t border-t-border-primary">
         <CaptionExtraSmall>
           Fundrise, LLC (“Fundrise“) operates a website at fundrise.com and certain mobile apps (the
@@ -205,7 +213,7 @@ export default function UserInvestStepTwo({ setCurrentPage }) {
             {/* <span className="text-sm text-sub-title">Ready to proceed?</span> */}
             <button
               className="px-4 py-2 rounded-md border border-btext-1-base text-btext-1-base font-display text-sm font-bold"
-              onClick={() => setCurrentPage?.('review')}
+              onClick={() => onContinue?.(selectedProjects)}
             >
               Continue
             </button>

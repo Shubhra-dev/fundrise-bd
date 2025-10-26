@@ -139,7 +139,11 @@ export default function Header() {
             {/* right: actions */}
             <div className="flex items-center gap-4">
               <div className="hidden lg:block">
-                <PrimaryButton label="Log in" textSize="text-sm" />
+                <PrimaryButton
+                  onClick={() => navigate('/auth/login')}
+                  label="Log in"
+                  textSize="text-sm"
+                />
               </div>
 
               {/* hamburger */}
@@ -235,7 +239,7 @@ export default function Header() {
                   </div>
                 </div>
                 <div className="pt-4 border-t">
-                  <PrimaryButton label="Log in" />
+                  <PrimaryButton onClick={() => navigate('/auth/login')} label="Log in" />
                 </div>
               </div>
             </div>
