@@ -4,11 +4,16 @@ import PrimaryButton from '../components/buttons/PrimaryButton';
 import SectionLayout from './SectionLayout';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../assets/Logo.svg';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { logOut } from '@/features/authentication/authSlice';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const [activeDropdown, setActiveDropdown] = useState('');
+  const user = useSelector((s) => s.auth);
+  const dispatch = useDispatch();
 
   // NEW: sticky-after-scroll state + refs
   const headerRef = useRef(null);
@@ -138,13 +143,76 @@ export default function Header() {
 
             {/* right: actions */}
             <div className="flex items-center gap-4">
-              <div className="hidden lg:block">
-                <PrimaryButton
-                  onClick={() => navigate('/auth/login')}
-                  label="Log in"
-                  textSize="text-sm"
-                />
-              </div>
+              {!user.isLoggedIn && (
+                <div className="hidden lg:block">
+                  <PrimaryButton
+                    onClick={() => navigate('/auth/login')}
+                    label="Log in"
+                    textSize="text-sm"
+                  />
+                </div>
+              )}
+              {/* desktop user profile image with dropdown */}
+              {user.isLoggedIn && (
+                <div className="relative">
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveDropdown(activeDropdown === 'profile' ? '' : 'profile');
+                    }}
+                    className="rounded-full w-10 h-10 cursor-pointer overflow-hidden border-2 border-secondary"
+                  >
+                    <img
+                      src={user.profileImage}
+                      alt="profile"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  {/* Dropdown menu */}
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className={`absolute right-0 top-full mt-2 min-w-[160px] bg-white border rounded-md shadow-xl z-50 transform transition-all duration-200 origin-top ${
+                      activeDropdown === 'profile'
+                        ? 'opacity-100 scale-y-100 visible'
+                        : 'opacity-0 scale-y-95 invisible'
+                    }`}
+                  >
+                    <button
+                      onClick={() => {
+                        navigate('/user/dashboard');
+                        setActiveDropdown('');
+                      }}
+                      className="text-left px-4 py-2 font-sora text-base font-normal leading-normal text-sub-heading hover:bg-gray-100 w-full block"
+                    >
+                      Dashboard
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        navigate('/user/profile');
+                        setActiveDropdown('');
+                      }}
+                      className="text-left px-4 py-2 font-sora text-base font-normal leading-normal text-sub-heading hover:bg-gray-100 w-full block"
+                    >
+                      Profile
+                    </button>
+
+                    <div className="border-t" />
+                    <button
+                      onClick={() => {
+                        // dispatch logout and navigate to login
+                        dispatch(logOut());
+                        setActiveDropdown('');
+                        navigate('/auth/login');
+                      }}
+                      className="text-left px-4 py-2 font-sora text-base font-normal leading-normal text-red-600 hover:bg-gray-50 w-full block"
+                    >
+                      Log out
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* hamburger */}
               <button
@@ -238,9 +306,34 @@ export default function Header() {
                     )}
                   </div>
                 </div>
-                <div className="pt-4 border-t">
-                  <PrimaryButton onClick={() => navigate('/auth/login')} label="Log in" />
-                </div>
+                {!user.isLoggedIn && (
+                  <div className="pt-4 border-t">
+                    <PrimaryButton onClick={() => navigate('/auth/login')} label="Log in" />
+                  </div>
+                )}
+                {user.isLoggedIn && (
+                  <div className="flex items-center justify-normal gap-4">
+                    <div
+                      onClick={() => navigate('/user/dashboard')}
+                      className="mt-2 rounded-full w-10 h-10 cursor-pointer overflow-hidden border-2 border-secondary"
+                    >
+                      <img
+                        src={user.profileImage}
+                        alt="profile"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="pt-4 border-t">
+                      <PrimaryButton
+                        onClick={() => {
+                          dispatch(logOut());
+                          navigate('/auth/login');
+                        }}
+                        label="Log Out"
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

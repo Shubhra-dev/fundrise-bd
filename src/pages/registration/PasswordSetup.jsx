@@ -5,6 +5,8 @@ import SubHeading from '@/components/text/SubHeading';
 import CaptionExtraSmall from '@/components/text/CaptionExtraSmall';
 import { passwordReset, registrationRequest } from '@/services/authenticationAPIs';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logIn } from '@/features/authentication/authSlice';
 
 const rulesList = [
   {
@@ -45,8 +47,8 @@ export default function PasswordSetup({ userData, setUserdata, onPrev, type }) {
   const [focused, setFocused] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState({ state: false, message: '' });
-  const from = location.state?.from?.pathname || '/';
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const results = useMemo(() => {
     const res = {};
@@ -66,7 +68,17 @@ export default function PasswordSetup({ userData, setUserdata, onPrev, type }) {
     try {
       const response = await registrationRequest(userData);
       console.log(response);
-      navigate(from, { replace: true });
+      // If backend returns auth token, dispatch logIn to update global auth state
+      const token = response?.result?.token;
+      const name =
+        `${response?.result?.investor?.first_name} ${response?.result?.investor?.last_name}` || '';
+      const profileImage = response?.result?.investor?.profile_image || '';
+
+      if (token) {
+        dispatch(logIn({ token, name, profileImage }));
+      }
+      // Navigate to home page after successful registration
+      navigate('/', { replace: true });
     } catch (error) {
       setError({
         state: true,
@@ -86,7 +98,6 @@ export default function PasswordSetup({ userData, setUserdata, onPrev, type }) {
     setError({ state: false, message: '' });
     try {
       const response = await passwordReset(userData);
-      console.log(response);
       navigate('/auth/login');
     } catch (error) {
       setError({

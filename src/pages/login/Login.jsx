@@ -4,6 +4,7 @@ import Logo from '@assets/Logo.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import SubHeading from '@/components/text/SubHeading';
 import { useDispatch } from 'react-redux';
+import { logIn } from '@/features/authentication/authSlice';
 import { EyeIcon, EyeOff } from 'lucide-react';
 import { loginRequest } from '@/services/authenticationAPIs';
 import CaptionExtraSmall from '@/components/text/CaptionExtraSmall';
@@ -25,8 +26,20 @@ export default function Login() {
     setError({ state: false, message: '' });
     try {
       const response = await loginRequest({ email, password });
-      console.log(response);
+      // Expected response to include an auth token and user meta
+      // adapt to actual response shape from API
+      const token = response?.result?.token;
+      const name =
+        `${response?.result?.investor?.first_name} ${response?.result?.investor?.last_name}` || '';
+      const profileImage = response?.result?.investor?.profile_image || '';
+
+      if (token) {
+        dispatch(logIn({ token, name, profileImage }));
+        navigate(from, { replace: true });
+        return;
+      }
     } catch (error) {
+      console.error(error);
       setError({ state: true, message: error.message || 'Login failed. Please try again.' });
     } finally {
       setLoading(false);
@@ -152,7 +165,7 @@ export default function Login() {
                   <div className="flex justify-center">
                     <button
                       type="button"
-                      onClick={() => alert('Forgot Password flow')}
+                      onClick={() => navigate('/auth/forgot-password')}
                       className="text-xs text-gray-400 hover:text-gray-500"
                     >
                       Forgot Password?
@@ -164,7 +177,7 @@ export default function Login() {
                   <button
                     type="button"
                     className="rounded-md border border-gray-200 px-5 py-2.5 text-sm font-medium text-btext-1-dark hover:border-btext-1-dark/40 transition"
-                    onClick={() => alert('Request Access flow')}
+                    onClick={() => navigate('/auth/register')}
                   >
                     Register
                   </button>

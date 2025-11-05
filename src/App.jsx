@@ -24,6 +24,9 @@ import ProtectedRoute from '@/ProtectedRoute';
 import Login from '@/pages/login/Login';
 import Registration from '@/pages/registration/Registration';
 import ForgotPassword from '@/pages/forgot-pasword/ForgotPassword';
+import UserSupport from '@/pages/user-support/UserSupport';
+import UserProfile from '@/pages/user-profile/UserProfile';
+import UserSettings from '@/pages/user-settings/UserSettings';
 
 const router = createBrowserRouter([
   {
@@ -64,9 +67,9 @@ const router = createBrowserRouter([
   },
   {
     element: (
-      <UserInvests />
-      // <ProtectedRoute>
-      // </ProtectedRoute>
+      <ProtectedRoute>
+        <UserInvests />
+      </ProtectedRoute>
     ),
     path: '/user/invests',
   },
@@ -77,6 +80,30 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     path: '/user/transactions',
+  },
+  {
+    element: (
+      <ProtectedRoute>
+        <UserSupport />
+      </ProtectedRoute>
+    ),
+    path: '/user/support',
+  },
+  {
+    element: (
+      <ProtectedRoute>
+        <UserProfile />
+      </ProtectedRoute>
+    ),
+    path: '/user/profile',
+  },
+  {
+    element: (
+      <ProtectedRoute>
+        <UserSettings />
+      </ProtectedRoute>
+    ),
+    path: '/user/settings',
   },
   {
     element: (

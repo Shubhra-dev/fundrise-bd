@@ -65,6 +65,7 @@ const authSlice = createSlice({
     },
 
     logIn: (state, action) => {
+      console.log(action.payload);
       const { token, name, profileImage } = action.payload;
       vaultSetToken(token); // memory only
       state.isLoggedIn = true;
@@ -80,6 +81,7 @@ const authSlice = createSlice({
     },
 
     profileImageChange: (state, action) => {
+      console.log(action.payload);
       state.profileImage = action.payload || '';
       writeMeta({ userName: state.userName, profileImage: state.profileImage });
     },

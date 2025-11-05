@@ -19,6 +19,7 @@ import SubHeading from '../../components/text/SubHeading';
 import { FaRegBell } from 'react-icons/fa';
 import MenuAlt from '../../assets/icons/MenuAlt.svg';
 import Profile from '../../assets/Profile.jpg';
+import { Toaster } from 'react-hot-toast';
 
 function DashboardLayout({ activeTab = 1, children }) {
   const navigate = useNavigate();
@@ -110,7 +111,7 @@ function DashboardLayout({ activeTab = 1, children }) {
               className={`${activeTab === 5 ? 'text-btext-2-dark' : 'text-paragraph'} text-xl`}
             />
           </MenuItem>
-          <MenuItem name={`Help Center`} active={activeTab === 6}>
+          <MenuItem link={`/user/support`} name={`Help Center`} active={activeTab === 6}>
             <IoHelpBuoyOutline
               className={`${activeTab === 6 ? 'text-btext-2-dark' : 'text-paragraph'} text-xl`}
             />
@@ -136,12 +137,12 @@ function DashboardLayout({ activeTab = 1, children }) {
       <div className="mt-10">
         <CaptionSmall extraClass={`uppercase px-7 py-2.5`}>General</CaptionSmall>
         <div className="mt-1.5" onClick={handleMenuClick}>
-          <MenuItem name={`Profile`} active={activeTab === 10}>
+          <MenuItem link={`/user/profile`} name={`Profile`} active={activeTab === 10}>
             <LuUserCheck
               className={`${activeTab === 10 ? 'text-btext-2-dark' : 'text-paragraph'} text-xl`}
             />
           </MenuItem>
-          <MenuItem name={`Settings`} active={activeTab === 11}>
+          <MenuItem link={`/user/settings`} name={`Settings`} active={activeTab === 11}>
             <MdOutlineSettings
               className={`${activeTab === 11 ? 'text-btext-2-dark' : 'text-paragraph'} text-xl`}
             />
@@ -240,7 +241,21 @@ function DashboardLayout({ activeTab = 1, children }) {
               </div>
             </div>
           </div>
-          <div className="pt-8">{children}</div>
+          <div className="pt-8">
+            {/* Global toast container for dashboard pages */}
+            <Toaster
+              toastOptions={{
+                style: {
+                  width: 700,
+                  fontSize: '20px', // Example of other styling
+                  padding: '10px',
+                },
+              }}
+              position="top-right"
+              reverseOrder={false}
+            />
+            {children}
+          </div>
         </main>
       </div>
     </div>
