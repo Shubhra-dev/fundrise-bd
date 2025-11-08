@@ -10,19 +10,19 @@ function handleClick(id) {
     behavior: 'smooth',
   });
 }
-function ProductDetailsHero() {
+function ProductDetailsHero({ projectData }) {
   const [activeSection, setActiveSection] = useState('overview');
   return (
     <SectionLayout>
       <div className="flex items-center justify-normal gap-5">
-        <SubTitle>North Orlando Development</SubTitle>
+        <SubTitle>{projectData?.name}</SubTitle>
         <div className="flex items-center gap-1">
           <GoDotFill className="text-lg text-bg-blush-mist-dark" />
-          <BodySmall>Active</BodySmall>
+          <BodySmall>{projectData?.status}</BodySmall>
         </div>
       </div>
       <BodyBase textColor={`text-sub-heading`} extraClass={`mt-[6px]`}>
-        Apopka, FL
+        {projectData?.company_name}
       </BodyBase>
       <div className="flex items-center justify-normal mt-8 overflow-x-auto border-b border-b-border-primary">
         {sections.map((item, index) => (

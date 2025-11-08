@@ -2,10 +2,15 @@ import { BiChevronRight } from 'react-icons/bi';
 import BodyBase from '../../components/text/BodyBase';
 import CaptionExtraSmall from '../../components/text/CaptionExtraSmall';
 import RadialProgress from '../../ui/RadialProgress';
+import { useNavigate } from 'react-router-dom';
 
 function PortfolioOverviewCards({ pct, title }) {
+  const nav = useNavigate();
   return (
-    <div className="flex items-center gap-4 p-1.5 tab:p-2.5">
+    <div
+      onClick={() => nav('/user/portfolio')}
+      className="flex items-center gap-4 p-1.5 tab:p-2.5 cursor-pointer"
+    >
       <div className="w-1/6">
         <RadialProgress
           value={pct}

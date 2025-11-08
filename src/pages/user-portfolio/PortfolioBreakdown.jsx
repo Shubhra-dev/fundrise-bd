@@ -1,43 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronDown, Percent, DollarSign } from 'lucide-react';
 import SubHeading from '../../components/text/SubHeading';
-
-/* ---- Data ---- */
-const FUNDS = [
-  {
-    id: 'navana',
-    name: 'NAVANA Real Estate',
-    allocation: 50.0, // percent of portfolio
-    netReturn: 0.0, // cumulative % return
-
-    children: [
-      { id: 'navana-belgravia', name: 'Navana Belgravia', allocation: 30.0, netReturn: 0.0 },
-      {
-        id: 'navana-windermere',
-        name: 'Navana Fateha Windermere',
-        allocation: 20.0,
-        netReturn: 0.0,
-      },
-    ],
-  },
-  {
-    id: 'shanta',
-    name: 'SHANTA Holdings',
-    allocation: 35.0,
-    netReturn: 0.0,
-    children: [
-      { id: 'dhaka-tower', name: 'Dhaka Tower', allocation: 20.0, netReturn: 0.0 },
-      { id: 'evermore', name: 'Evermore', allocation: 15.0, netReturn: 0.0 },
-    ],
-  },
-  {
-    id: 'south-breeze',
-    name: 'South Breeze Housing Ltd.',
-    allocation: 15.0,
-    netReturn: 0.0,
-    children: [{ id: 'south-supreme', name: 'South Supreme', allocation: 15.0, netReturn: 0.0 }],
-  },
-];
+import { getPortfolioBreakdown } from '../../services/portfolio';
 
 /* ---- Helpers ---- */
 const fmtPercent = (v) => `${Number(v).toFixed(1)}%`;
@@ -49,15 +13,30 @@ const fmtCurrency = (v, currency = 'USD') =>
     notation: 'compact',
   }).format(v);
 
-export default function PortfolioBreakdown({
-  data = FUNDS,
-  currency = 'USD',
-  portfolioValue = 100000, // total portfolio value used for $ conversion
-}) {
-  // expanded sections as a Set
+export default function PortfolioBreakdown() {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [breakdownData, setBreakdownData] = useState(null);
   const [expandedSections, setExpandedSections] = useState(() => new Set());
-  // view mode: '%' or '$'
   const [mode, setMode] = useState('%');
+  const currency = 'USD';
+
+  useEffect(() => {
+    const fetchBreakdown = async () => {
+      try {
+        setLoading(true);
+        const response = await getPortfolioBreakdown();
+        setBreakdownData(response.result);
+        setError(null);
+      } catch (err) {
+        setError(err.message || 'Failed to fetch portfolio breakdown');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBreakdown();
+  }, []);
 
   const toggleSection = (id) => {
     setExpandedSections((prev) => {
@@ -67,24 +46,35 @@ export default function PortfolioBreakdown({
     });
   };
 
-  // Weighted average net return (%) across groups, weighted by allocation share
-  const weightedAverageNetReturnPct = useMemo(() => {
-    const totalAlloc = data.reduce((s, g) => s + (g.allocation || 0), 0) || 1;
-    const sum = data.reduce((acc, g) => acc + (g.netReturn || 0) * (g.allocation || 0), 0);
-    return sum / totalAlloc;
-  }, [data]);
+  const { total_invested, breakdown, weighted_average } = breakdownData || {};
 
   // Display helpers based on mode
   const displayAllocation = (pct) =>
-    mode === '%' ? fmtPercent(pct) : fmtCurrency((pct / 100) * portfolioValue, currency);
+    mode === '%' ? fmtPercent(pct) : fmtCurrency((pct / 100) * (total_invested || 0), currency);
 
   const displayNetReturn = (allocPct, netReturnPct) => {
     if (mode === '%') return fmtPercent(netReturnPct);
     // In $: amount earned = (allocation dollars) * (netReturn%)
-    const allocDollars = (allocPct / 100) * portfolioValue;
+    const allocDollars = (allocPct / 100) * (total_invested || 0);
     const earned = (netReturnPct / 100) * allocDollars;
     return fmtCurrency(earned, currency);
   };
+
+  if (loading) {
+    return (
+      <div className="w-full mt-5 flex justify-center">
+        <div className="animate-pulse">Loading portfolio breakdown...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="w-full mt-5 text-red-500 text-center">{error}</div>;
+  }
+
+  if (!breakdownData) {
+    return <div className="w-full mt-5 text-center">No portfolio data available.</div>;
+  }
 
   return (
     <div className="w-full mt-5">
@@ -135,19 +125,21 @@ export default function PortfolioBreakdown({
                 <td className="px-5 py-3.5 border-r-2 border-r-border-secondary"></td>
                 <td className="px-5 py-3.5 text-center text-base font-normal">Cumulative</td>
               </tr>
-              {data.map((group) => {
-                const isOpen = expandedSections.has(group.id);
+              {breakdown?.map((company) => {
+                const id =
+                  company.company_name?.toLowerCase().replace(/\s+/g, '-') || company.company_name;
+                const isOpen = expandedSections.has(id);
                 return (
-                  <Fragment key={group.id}>
+                  <Fragment key={id}>
                     {/* Group row */}
                     <tr className="bg-bg-primary-2">
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-2.5">
                           <button
-                            onClick={() => toggleSection(group.id)}
+                            onClick={() => toggleSection(id)}
                             className="flex-shrink-0 text-gray-400 hover:text-gray-600"
                             aria-expanded={isOpen}
-                            aria-controls={`${group.id}-children`}
+                            aria-controls={`${id}-children`}
                           >
                             <ChevronDown
                               className={`w-4 h-4 transition-transform ${
@@ -157,42 +149,59 @@ export default function PortfolioBreakdown({
                             />
                           </button>
                           <span className="text-[13px] font-medium text-gray-900">
-                            {group.name}
+                            {company.company_name}
                           </span>
                         </div>
                       </td>
                       <td className="px-6 py-3.5 text-right border-r-2 border-r-border-secondary">
                         <div className="flex items-center justify-end gap-4">
-                          <RadialProgress value={group.allocation} size={30} strokeWidth={6} />
+                          <RadialProgress
+                            value={company.allocation_percentage}
+                            size={30}
+                            strokeWidth={6}
+                          />
                           <span className="text-[13px] text-gray-900">
-                            {displayAllocation(group.allocation)}
+                            {displayAllocation(company.allocation_percentage)}
                           </span>
                         </div>
                       </td>
                       <td className="px-6 py-3.5 text-right text-[13px] text-gray-900">
-                        {displayNetReturn(group.allocation, group.netReturn)}
+                        {displayNetReturn(
+                          company.allocation_percentage,
+                          company.net_return_percentage
+                        )}
                       </td>
                     </tr>
 
                     {/* Children */}
                     {isOpen &&
-                      (group.children || []).map((child) => (
-                        <tr
-                          key={child.id}
-                          id={`${group.id}-children`}
-                          className="border-t border-gray-100 bg-gray-50/30"
-                        >
-                          <td className="px-6 py-2.5 pl-14">
-                            <span className="text-[13px] text-gray-700">{child.name}</span>
-                          </td>
-                          <td className="px-6 py-2.5 text-right border-r-2 border-r-border-secondary text-[13px] text-gray-700">
-                            {displayAllocation(child.allocation)}
-                          </td>
-                          <td className="px-6 py-2.5 text-right text-[13px] text-gray-700">
-                            {displayNetReturn(child.allocation, child.netReturn)}
-                          </td>
-                        </tr>
-                      ))}
+                      (company.projects || []).map((project) => {
+                        const childId =
+                          project.project_name?.toLowerCase().replace(/\s+/g, '-') ||
+                          project.project_name;
+                        return (
+                          <tr
+                            key={childId}
+                            id={`${id}-children`}
+                            className="border-t border-gray-100 bg-gray-50/30"
+                          >
+                            <td className="px-6 py-2.5 pl-14">
+                              <span className="text-[13px] text-gray-700">
+                                {project.project_name}
+                              </span>
+                            </td>
+                            <td className="px-6 py-2.5 text-right border-r-2 border-r-border-secondary text-[13px] text-gray-700">
+                              {displayAllocation(project.allocation_percentage)}
+                            </td>
+                            <td className="px-6 py-2.5 text-right text-[13px] text-gray-700">
+                              {displayNetReturn(
+                                project.allocation_percentage,
+                                project.net_return_percentage
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
                   </Fragment>
                 );
               })}
@@ -203,12 +212,14 @@ export default function PortfolioBreakdown({
                   Weighted Average
                 </td>
                 <td className="px-6 py-3.5 text-right border-r-2 border-r-border-secondary text-[13px] font-medium text-gray-900">
-                  {mode === '%' ? '100.0%' : fmtCurrency(portfolioValue, currency)}
+                  {mode === '%'
+                    ? fmtPercent(weighted_average.allocation_percentage)
+                    : fmtCurrency(weighted_average.allocation_amount, currency)}
                 </td>
                 <td className="px-6 py-3.5 text-right text-[13px] font-medium text-gray-900">
                   {mode === '%'
-                    ? fmtPercent(weightedAverageNetReturnPct)
-                    : fmtCurrency((weightedAverageNetReturnPct / 100) * portfolioValue, currency)}
+                    ? fmtPercent(weighted_average.net_return_percentage)
+                    : fmtCurrency(weighted_average.net_return_amount, currency)}
                 </td>
               </tr>
             </tbody>

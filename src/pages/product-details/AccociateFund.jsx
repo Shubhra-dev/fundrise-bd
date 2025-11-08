@@ -14,7 +14,7 @@ function AccociateFund() {
         <div className="flex flex-wrap sm:flex-nowrap items-center justify-normal gap-2 sm:gap-6">
           <Heading>Income Real Estate Fund</Heading>
           <div className="rounded-lg p-2.5 bg-[#E8FFD9] flex items-center justify-normal gap-1">
-            <GoDotFill classsName="text-success text-xl" />
+            <GoDotFill className="text-success text-xl" />
             <BodySmall>Open</BodySmall>
           </div>
           <div className="rounded-lg p-2.5 bg-bg-primary-2">

@@ -4,37 +4,41 @@ import BodyBase from '../../components/text/BodyBase';
 import BodySmall from '../../components/text/BodySmall';
 import SubHeading from '../../components/text/SubHeading';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
-function Updates() {
+import { Link } from 'react-router-dom';
+function Updates({ projectData }) {
   return (
     <SectionLayout padding={`py-0 pt-0 pb-[50px] sm:pb-[50px] tab:pb-[50px]`} id={`updates`}>
       <SubHeading>Updates</SubHeading>
-      <div className="mt-4 p-5 sm:p-[30px] border border-border-primary rounded-xl">
-        <BodyBase fontWeight={`font-bold`} textColor={`text-sub-heading`}>
-          New acquisition
-        </BodyBase>
-        <BodySmall textColor={`text-sub-heading`} extraClass={`mt-1.5`}>
-          March 19, 2025
-        </BodySmall>
-        <BodySmall textColor={`text-sub-heading`} extraClass={`my-4`}>
-          New high-yield investment with a 13% fixed return in a 300-unit multifamily development
-          near Orlando, FL.
-        </BodySmall>
-        <div className="bg-bg-primary-2 rounded-3xl p-5 flex items-center justify-normal gap-3 sm:gap-16">
-          <div className="w-[65%] sm:w-2/3 tab:w-3/4">
-            <BodySmall textColor={`text-sub-heading`}>
-              Portfolio Update: New preferred equity investment in Orlando metro area
-            </BodySmall>
-            <div className="mt-3">
-              <PrimaryButton textSize="text-sm" label="View Updates" />
+      {projectData.map((update, index) => (
+        <div key={index} className="mt-4 p-5 sm:p-[30px] border border-border-primary rounded-xl">
+          <BodyBase fontWeight={`font-bold`} textColor={`text-sub-heading`}>
+            {update?.title}
+          </BodyBase>
+          <BodySmall textColor={`text-sub-heading`} extraClass={`mt-1.5`}>
+            {update?.date}
+          </BodySmall>
+          <BodySmall textColor={`text-sub-heading`} extraClass={`my-4`}>
+            {update?.details}
+          </BodySmall>
+          <div className="bg-bg-primary-2 rounded-3xl p-5 flex items-center justify-normal gap-3 sm:gap-16">
+            <div className="w-[65%] sm:w-2/3 tab:w-3/4">
+              <BodySmall textColor={`text-sub-heading`}>{update?.post_title}</BodySmall>
+              <Link
+                to={`/letters-to-investor/details/${update?.post_slug}`}
+                className="mt-3 inline-block"
+                rel="noopener noreferrer"
+              >
+                <PrimaryButton textSize="text-sm" label="View Updates" />
+              </Link>
             </div>
+            <img
+              src={update?.post_thumbnail_image}
+              alt="image"
+              className="w-[35%] h-28 tab:h-32 sm: sm:w-1/3 tab:w-1/4 rounded-xl object-cover"
+            />
           </div>
-          <img
-            src={Image}
-            alt="image"
-            className="w-[35%] h-28 tab:h-32 sm: sm:w-1/3 tab:w-1/4 rounded-xl object-cover"
-          />
         </div>
-      </div>
+      ))}
     </SectionLayout>
   );
 }

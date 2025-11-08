@@ -1,58 +1,191 @@
+import { useEffect, useState } from 'react';
 import CaptionSmall from '../../components/text/CaptionSmall';
 import Title from '../../components/text/Title';
 import DashboardLayout from '../user-dashboard/DashboardLayout';
 import AssetValue from '../../assets/AssetValue.png';
 import CaptionExtraSmall from '../../components/text/CaptionExtraSmall';
 import PortfolioBreakdown from './PortfolioBreakdown';
+import { getPortfolioIndex } from '@/services/portfolio';
+import RoundedButton from '@/components/buttons/RoundedButton';
 
 function UserPortfolio() {
+  const [activeTab, setActiveTab] = useState('value');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [portfolioData, setPortfolioData] = useState(null);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await getPortfolioIndex();
+        setPortfolioData(response.result);
+        setError(null);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <DashboardLayout activeTab={1}>
+        <div className="w-full flex flex-col items-center justify-center min-h-[60vh]">
+          <div className="w-16 h-16 relative">
+            <div className="w-full h-full border-4 border-icon-brand-3 rounded-full animate-spin border-t-transparent"></div>
+          </div>
+          <CaptionSmall textColor="text-sub-heading" extraClass="mt-4">
+            Loading your portfoilio...
+          </CaptionSmall>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <DashboardLayout activeTab={1}>
+        <div className="w-full flex flex-col items-center justify-center min-h-[60vh] p-5">
+          <div className="w-full max-w-md rounded-[10px] border border-error p-6 bg-error/5">
+            <Title extraClass="text-error text-center mb-2">Oops!</Title>
+            <CaptionSmall textColor="text-sub-heading" extraClass="text-center">
+              {error}
+            </CaptionSmall>
+            <RoundedButton
+              variant="primary"
+              extraClass="mt-4 mx-auto"
+              onClick={() => window.location.reload()}
+              label="Try Again"
+            />
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   return (
     <DashboardLayout activeTab={2}>
       <div className="flex flex-col sm:flex-row items-stretch justify-normal gap-10">
         <div className="w-full sm:w-2/5 tab:w-1/3">
-          <CaptionSmall textColor={`text-sub-heading`}>Initial Investment Amount</CaptionSmall>
-          <Title extraClass={`mt-3`}>$3,000.00</Title>
-          <div className="mt-10 px-[5px] py-2.5 flex justify-between">
-            <CaptionSmall fontWeight={`font-bold`} textColor={`text-sub-heading`}>
-              Net Contribution
-            </CaptionSmall>
-            <CaptionSmall
-              fontWeight={`font-bold`}
-              textColor={`text-sub-heading`}
-              align={`text-end`}
+          <div className="flex border-b border-gray-200 mb-6">
+            <button
+              onClick={() => setActiveTab('value')}
+              className={`px-4 py-2 text-xl font-display font-semibold ${
+                activeTab === 'value'
+                  ? 'text-btext-1-dark border-b-2 border-btext-1-dark'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
             >
-              $3,000.00
-            </CaptionSmall>
-          </div>
-          <div className="px-[5px] py-2.5 flex justify-between">
-            <CaptionSmall textColor={`text-sub-heading`}>Gross dividends</CaptionSmall>
-            <CaptionSmall textColor={`text-sub-heading`} align={`text-end`}>
-              $0.00
-            </CaptionSmall>
-          </div>
-          <div className="px-[5px] py-2.5 flex justify-between">
-            <CaptionSmall textColor={`text-sub-heading`}>Appreciation</CaptionSmall>
-            <CaptionSmall textColor={`text-sub-heading`} align={`text-end`}>
-              $0.00
-            </CaptionSmall>
-          </div>
-          <div className="px-[5px] py-2.5 flex justify-between">
-            <CaptionSmall textColor={`text-sub-heading`}>Advisory fee</CaptionSmall>
-            <CaptionSmall textColor={`text-sub-heading`} align={`text-end`}>
-              $0.00
-            </CaptionSmall>
-          </div>
-          <div className="px-[5px] py-2.5 flex justify-between border-t border-t-black">
-            <CaptionSmall fontWeight={`font-medium`} textColor={`text-sub-heading`}>
-              Net return
-            </CaptionSmall>
-            <CaptionSmall
-              fontWeight={`font-medium`}
-              textColor={`text-sub-heading`}
-              align={`text-end`}
+              Value
+            </button>
+            <button
+              onClick={() => setActiveTab('netReturn')}
+              className={`px-4 py-2 text-xl font-display font-semibold ${
+                activeTab === 'netReturn'
+                  ? 'text-btext-1-dark border-b-2 border-btext-1-dark'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
             >
-              $0.00
-            </CaptionSmall>
+              Net Return
+            </button>
+          </div>
+
+          <div className={activeTab === 'value' ? 'block' : 'hidden'}>
+            <CaptionSmall textColor={`text-sub-heading`}>Initial Investment Amount</CaptionSmall>
+            <Title extraClass={`mt-3`}>${portfolioData.value.initial_investment_amount}</Title>
+            <div className="mt-10 px-[5px] py-2.5 flex justify-between">
+              <CaptionSmall fontWeight={`font-bold`} textColor={`text-sub-heading`}>
+                Net Contribution
+              </CaptionSmall>
+              <CaptionSmall
+                fontWeight={`font-bold`}
+                textColor={`text-sub-heading`}
+                align={`text-end`}
+              >
+                ${portfolioData.value.net_contribution}
+              </CaptionSmall>
+            </div>
+            <div className="px-[5px] py-2.5 flex justify-between">
+              <CaptionSmall textColor={`text-sub-heading`}>Gross dividends</CaptionSmall>
+              <CaptionSmall textColor={`text-sub-heading`} align={`text-end`}>
+                ${portfolioData.value.gross_dividends}
+              </CaptionSmall>
+            </div>
+            <div className="px-[5px] py-2.5 flex justify-between">
+              <CaptionSmall textColor={`text-sub-heading`}>Appreciation</CaptionSmall>
+              <CaptionSmall textColor={`text-sub-heading`} align={`text-end`}>
+                ${portfolioData.value.appreciation}
+              </CaptionSmall>
+            </div>
+            <div className="px-[5px] py-2.5 flex justify-between">
+              <CaptionSmall textColor={`text-sub-heading`}>Advisory fee</CaptionSmall>
+              <CaptionSmall textColor={`text-sub-heading`} align={`text-end`}>
+                ${portfolioData.value.advisory_fee}
+              </CaptionSmall>
+            </div>
+            <div className="px-[5px] py-2.5 flex justify-between border-t border-t-black">
+              <CaptionSmall fontWeight={`font-medium`} textColor={`text-sub-heading`}>
+                Net return
+              </CaptionSmall>
+              <CaptionSmall
+                fontWeight={`font-medium`}
+                textColor={`text-sub-heading`}
+                align={`text-end`}
+              >
+                ${portfolioData.value.net_return_amount}
+              </CaptionSmall>
+            </div>
+          </div>
+
+          <div className={activeTab === 'netReturn' ? 'block' : 'hidden'}>
+            <CaptionSmall textColor={`text-sub-heading`}>Net Return Percentage</CaptionSmall>
+            <Title extraClass={`mt-3`}>{portfolioData.net_return.net_return_percentage}%</Title>
+            <div className="mt-10 px-[5px] py-2.5 flex justify-between">
+              <CaptionSmall fontWeight={`font-bold`} textColor={`text-sub-heading`}>
+                Net Return Amount
+              </CaptionSmall>
+              <CaptionSmall
+                fontWeight={`font-bold`}
+                textColor={`text-sub-heading`}
+                align={`text-end`}
+              >
+                ${portfolioData.net_return.net_return_amount}
+              </CaptionSmall>
+            </div>
+            <div className="px-[5px] py-2.5 flex justify-between">
+              <CaptionSmall textColor={`text-sub-heading`}>Gross Dividends</CaptionSmall>
+              <CaptionSmall textColor={`text-sub-heading`} align={`text-end`}>
+                ${portfolioData.net_return.gross_dividends}
+              </CaptionSmall>
+            </div>
+            <div className="px-[5px] py-2.5 flex justify-between">
+              <CaptionSmall textColor={`text-sub-heading`}>Appreciation</CaptionSmall>
+              <CaptionSmall textColor={`text-sub-heading`} align={`text-end`}>
+                ${portfolioData.net_return.appreciation}
+              </CaptionSmall>
+            </div>
+            <div className="px-[5px] py-2.5 flex justify-between">
+              <CaptionSmall textColor={`text-sub-heading`}>Advisory Fee</CaptionSmall>
+              <CaptionSmall textColor={`text-sub-heading`} align={`text-end`}>
+                ${portfolioData.net_return.advisory_fee}
+              </CaptionSmall>
+            </div>
+            <div className="px-[5px] py-2.5 flex justify-between border-t border-t-black">
+              <CaptionSmall fontWeight={`font-medium`} textColor={`text-sub-heading`}>
+                Dividends
+              </CaptionSmall>
+              <CaptionSmall
+                fontWeight={`font-medium`}
+                textColor={`text-sub-heading`}
+                align={`text-end`}
+              >
+                ${portfolioData.net_return.dividends}
+              </CaptionSmall>
+            </div>
           </div>
         </div>
         <div className="w-full sm:w-3/5 tab:w-2/3 flex flex-col gap-5 items-center justify-center c">

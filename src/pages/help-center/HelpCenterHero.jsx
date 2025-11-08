@@ -2,7 +2,7 @@ import SectionLayout from '../../ui/SectionLayout';
 import HelpCenter from '../../assets/HelpCenter.jpg';
 import Title from '../../components/text/Title';
 import { FaSearch } from 'react-icons/fa';
-function HelpCenterHero() {
+function HelpCenterHero({ search, setSearch }) {
   return (
     <SectionLayout>
       <div className="flex items-center justify-normal sm:gap-[106px]">
@@ -11,9 +11,10 @@ function HelpCenterHero() {
           <div className="mt-8 relative">
             <input
               type="text"
-              name=""
+              name="search"
               placeholder="Search"
-              id=""
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               className="py-4 pr-8 pl-3 w-full text-sm border  border-border-primary"
             />
             <FaSearch className="absolute top-[35%] right-3 text-xl" />

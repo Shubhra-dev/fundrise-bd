@@ -33,6 +33,7 @@ function UserProfile() {
         const data = await getProfileData();
         if (data.success) {
           setProfileData(data.result.investor);
+          console.log(data.result.investor);
         } else {
           setIsError({ state: true, msg: 'Error fetching data!' });
         }

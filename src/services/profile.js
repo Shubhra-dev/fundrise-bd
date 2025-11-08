@@ -5,8 +5,11 @@ export async function getProfileData() {
   return await secureGet(`${BASE_URL}/investor-panel/my-account`);
 }
 export async function updateProfile(formData) {
-  console.log(formData);
-  return await securePost(`${BASE_URL}/investor-panel/my-account-update`, formData);
+  const userData = {
+    ...formData,
+    date_of_birth: formData.date_of_birth.split('-').reverse().join('/'),
+  };
+  return await securePost(`${BASE_URL}/investor-panel/my-account-update`, userData);
 }
 export const uploadProfileImage = async (file) => {
   const formdata = new FormData();

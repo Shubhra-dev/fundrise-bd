@@ -2,7 +2,7 @@ import BodySmall from '../../components/text/BodySmall';
 import SubHeading from '../../components/text/SubHeading';
 import SectionLayout from '../../ui/SectionLayout';
 import StackedImageCarousel from '../../ui/StackedImageSlider';
-function Overview() {
+function Overview({ projectData }) {
   return (
     <SectionLayout padding={`py-0 pt-0 pb-[50px] sm:pb-[50px] tab:pb-[50px]`} id={`overview`}>
       <SubHeading>Overview</SubHeading>
@@ -10,23 +10,21 @@ function Overview() {
         <div className="w-full sm:w-[55%] tab:w-[45%] border border-border-primary">
           <div className="px-7 py-4 flex items-center justify-between border-b border-b-border-primary">
             <BodySmall textColor={`text-sub-heading`}>Asset Class</BodySmall>
-            <BodySmall textColor={`text-sub-heading`}>Private Credit</BodySmall>
+            <BodySmall textColor={`text-sub-heading`}>
+              {projectData?.overview.asset_class || 'N/A'}
+            </BodySmall>
           </div>
           <div className="px-7 py-4 flex items-center justify-between border-b border-b-border-primary">
             <BodySmall textColor={`text-sub-heading`}>Asset Type</BodySmall>
-            <BodySmall textColor={`text-sub-heading`}>Preferred equity</BodySmall>
-          </div>
-          <div className="px-7 py-4 flex items-center justify-between border-b border-b-border-primary">
-            <BodySmall textColor={`text-sub-heading`}>Strategy</BodySmall>
-            <BodySmall textColor={`text-sub-heading`}>Fixed income</BodySmall>
+            <BodySmall textColor={`text-sub-heading`}>{projectData?.overview.asset_type}</BodySmall>
           </div>
           <div className="px-7 py-4 flex items-center justify-between">
-            <BodySmall textColor={`text-sub-heading`}>Funds</BodySmall>
-            <BodySmall textColor={`text-sub-heading`}>Income real estate fund</BodySmall>
+            <BodySmall textColor={`text-sub-heading`}>Strategy</BodySmall>
+            <BodySmall textColor={`text-sub-heading`}>{projectData?.overview.strategy}</BodySmall>
           </div>
         </div>
         <div className="w-full sm:w-[45%] tab:w-[55%]">
-          <StackedImageCarousel />
+          <StackedImageCarousel images={projectData.images} />
         </div>
       </div>
     </SectionLayout>

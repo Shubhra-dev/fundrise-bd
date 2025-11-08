@@ -11,7 +11,7 @@ import Blog2 from '../../assets/Blog2.png';
 import Send from '../../assets/icons/Send.svg';
 import NewsCard from './NewsCard';
 import CaptionExtraSmall from '../../components/text/CaptionExtraSmall';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import RadialProgress from '../../ui/RadialProgress';
 import BodyBase from '../../components/text/BodyBase';
 import BodySmall from '../../components/text/BodySmall';
@@ -21,58 +21,35 @@ import PortfolioOverviewCards from './PortfolioOverviewCards';
 import Calculator from '../../assets/Calculator.png';
 import HelpFAQ from '../../assets/HelpFAQ.png';
 import RoundedButton from '../../components/buttons/RoundedButton';
-const newsCards = [
-  {
-    id: 'pu-1',
-    badge: 'Feature Update',
-    title: 'Positive performance continues through first',
-    summary:
-      'Strong fundamentals and continued operating rigor resulted in yet another quarter of positive returns across all three primary asset classes.',
-    strategy: null,
-    starCount: 2,
-    img: Blog5,
-    imageAlt: 'Abstract collage with houses and circular graphic',
-  },
-  {
-    id: 'na-1',
-    badge: 'New Acquisition',
-    title: 'Portfolio update: New preferred equity investment',
-    summary:
-      'New high-yield investment with a 14.00% fixed return in a 290-unit multifamily development in Anna, TX.',
-    strategy: 'Fixed Income',
-    starCount: 1,
-    img: Blog6,
-    imageAlt: 'Neighborhood at sunset with houses and cars',
-  },
-  {
-    id: 'pu-1',
-    badge: 'Performance Update',
-    title: 'Outperformance amidst market uncertainty',
-    summary:
-      'Strong operating performance resulted in generally positive returns for the first quarter of 2025 across real estate, credit, and venture capital.',
-    strategy: null,
-    starCount: 0,
-    img: Blog1,
-    imageAlt: 'Abstract collage with houses and circular graphic',
-  },
-  {
-    id: 'pu-2',
-    badge: 'Performance Update',
-    title: 'The case for real estate in 2025',
-    summary:
-      'In our annual letter to investors, we discuss how falling interest rates over the course of the year kicked off what we expect to be an extended period...',
-    strategy: null,
-    starCount: 0,
-    img: Blog2,
-    imageAlt: 'House with chart overlay on blue background',
-  },
-];
+import { getDashboardData } from '@/services/dashboard';
+import { useNavigate } from 'react-router-dom';
+import Newsfeed from '@/pages/user-dashboard/Newsfeed';
 
 function UserdashBoard() {
   const [copied, setCopied] = useState(false);
-  const inviteUrl = 'https://fundrise.com/r?i=pep094';
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [dashboardData, setDashboardData] = useState(null);
+  const nav = useNavigate();
 
-  const copyToClipboard = async () => {
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await getDashboardData();
+        setDashboardData(response.result);
+        setError(null);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  const copyToClipboard = async (inviteUrl) => {
     try {
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(inviteUrl);
@@ -94,13 +71,49 @@ function UserdashBoard() {
       console.error('Copy failed:', e);
     }
   };
+  if (isLoading) {
+    return (
+      <DashboardLayout activeTab={1}>
+        <div className="w-full flex flex-col items-center justify-center min-h-[60vh]">
+          <div className="w-16 h-16 relative">
+            <div className="w-full h-full border-4 border-icon-brand-3 rounded-full animate-spin border-t-transparent"></div>
+          </div>
+          <CaptionSmall textColor="text-sub-heading" extraClass="mt-4">
+            Loading your dashboard...
+          </CaptionSmall>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <DashboardLayout activeTab={1}>
+        <div className="w-full flex flex-col items-center justify-center min-h-[60vh] p-5">
+          <div className="w-full max-w-md rounded-[10px] border border-error p-6 bg-error/5">
+            <Title extraClass="text-error text-center mb-2">Oops!</Title>
+            <CaptionSmall textColor="text-sub-heading" extraClass="text-center">
+              {error}
+            </CaptionSmall>
+            <RoundedButton
+              variant="primary"
+              extraClass="mt-4 mx-auto"
+              onClick={() => window.location.reload()}
+              label="Try Again"
+            />
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   return (
     <DashboardLayout activeTab={1}>
       <div className="w-full flex flex-col sm:flex-row items-stretch justify-normal gap-4 mt-10">
         <div className="w-full sm:w-2/3">
           <div className="w-full rounded-[10px] border border-border-primary p-5">
             <CaptionSmall textColor={`text-sub-heading`}>Acoount value</CaptionSmall>
-            <Title extraClass={`mt-[14px]`}>$3,000.00</Title>
+            <Title extraClass={`mt-[14px]`}>${dashboardData.account_value}</Title>
             <img src={AssetValue} alt="asset value" className="w-36 h-32 m-auto my-11" />
             <CaptionSmall textColor={`text-sub-heading`}>
               Your account value chart will be available a week after order completion. Your
@@ -112,9 +125,9 @@ function UserdashBoard() {
               <BodySmall fontWeight={`font-bold`}>Portfolio overview</BodySmall>
               <LuCircleChevronRight />
             </div>
-            <PortfolioOverviewCards pct={50} title={'NAVANA Real Estate'} />
-            <PortfolioOverviewCards pct={35} title={'Swadesh Real Estate'} />
-            <PortfolioOverviewCards pct={15} title={'South Breeze Holdings'} />
+            {dashboardData.portfolio_overview.map((item) => (
+              <PortfolioOverviewCards pct={50} title={'NAVANA Real Estate'} />
+            ))}
           </div>
           <div className="w-full rounded-[10px] bg-bg-primary-2 border border-icon-brand-3 mt-4 p-5">
             <div className="flex items-center justify-between">
@@ -128,23 +141,7 @@ function UserdashBoard() {
               tab after the associated order settles.
             </CaptionSmall>
           </div>
-          <div className="my-6 w-full">
-            <SubHeading>Newsfeed</SubHeading>
-            <div className="mt-6 w-full flex flex-col items-start justify-normal gap-6">
-              {newsCards.map((item, index) => (
-                <NewsCard
-                  key={index}
-                  title={item.title}
-                  badge={item.badge}
-                  summary={item.summary}
-                  image={item.img}
-                  imageAlt={item.imageAlt}
-                  strategy={item.strategy}
-                  starCount={item.starCount}
-                />
-              ))}
-            </div>
-          </div>
+          <Newsfeed />
         </div>
         <div className="w-full sm:w-1/3">
           <div className="border border-border-primary rounded-[10px] p-5">
@@ -164,11 +161,16 @@ function UserdashBoard() {
               <div className="flex items-center justify-normal gap-2">
                 <IoLinkSharp className="text-xl" />
                 <CaptionExtraSmall textColor={`text-black`}>
-                  {inviteUrl.replace(/^https?:\/\//, '')}
+                  {`https://fundrise.com/r?i=${dashboardData.refer_code}`.replace(
+                    /^https?:\/\//,
+                    ''
+                  )}
                 </CaptionExtraSmall>
               </div>
               <button
-                onClick={copyToClipboard}
+                onClick={() =>
+                  copyToClipboard(`https://fundrise.com/r?i=${dashboardData.refer_code}`)
+                }
                 className="w-full tab:w-max py-2.5 px-[13px] rounded-md bg-bg-dusky-plum-base text-white font-display font-bold text-sm"
               >
                 {copied ? 'Copied!' : 'Copy'}
@@ -180,9 +182,9 @@ function UserdashBoard() {
               <BodySmall fontWeight={`font-bold`}>Portfolio overview</BodySmall>
               <LuCircleChevronRight />
             </div>
-            <PortfolioOverviewCards pct={50} title={'NAVANA Real Estate'} />
-            <PortfolioOverviewCards pct={35} title={'Swadesh Real Estate'} />
-            <PortfolioOverviewCards pct={15} title={'South Breeze Holdings'} />
+            {dashboardData.portfolio_overview.map((item, index) => (
+              <PortfolioOverviewCards pct={item.percentage.toFixed(2)} title={item.project_name} />
+            ))}
           </div>
           <div className="border border-border-primary rounded-[10px] p-5 mt-4">
             <div className="flex items-center justify-normal gap-5">
@@ -203,6 +205,7 @@ function UserdashBoard() {
                 width="w-max"
                 textSize="text-sm"
                 padding="py-3 px-6"
+                onClick={() => nav('/user/calculator')}
               />
             </div>
           </div>
@@ -227,6 +230,7 @@ function UserdashBoard() {
                 hoverBg="hover:bg-btext-1-base/20"
                 textColor="text-btext-1-base"
                 border="border border-btext-1-base"
+                onClick={() => nav('/user/support')}
               />
             </div>
           </div>

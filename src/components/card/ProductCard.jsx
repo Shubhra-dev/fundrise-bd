@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import BodyBase from '../text/BodyBase';
 import BodySmall from '../text/BodySmall';
 import CaptionExtraSmall from '../text/CaptionExtraSmall';
@@ -7,9 +8,14 @@ function ProductCard({
   title = `Anna Development`,
   text = `Anna TX.`,
   type = `Preferred Equity`,
+  slug,
 }) {
+  const navigate = useNavigate();
   return (
-    <div className="bg-border-primary chamfer-tr-5 p-[1px] rounded-md">
+    <div
+      onClick={() => navigate(`/product/details/${slug}`)}
+      className="bg-border-primary chamfer-tr-5 p-[1px] rounded-md"
+    >
       <div className="chamfer-tr-5 p-2.5 bg-bg-alternative rounded-md">
         <div>
           <img

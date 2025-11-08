@@ -1,177 +1,154 @@
 // src/pages/user-transactions/UserTransaction.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BodySmall from '@/components/text/BodySmall';
 import DashboardLayout from '../user-dashboard/DashboardLayout';
 import SmallHeading from '@components/text/SubHeading';
 import CaptionExtraSmall from '@/components/text/CaptionExtraSmall';
-import CaptionSmall from '@/components/text/CaptionSmall';
-import { ChevronRight, X } from 'lucide-react';
-
-const rows = [
-  { name: 'Flagship Real Estate Fund', quantity: null, price: null, amount: 2700 },
-  { name: 'Income Real Estate Fund', quantity: null, price: null, amount: 300 },
-];
-
-const dash = '— —'; // stylistic double em-dash
-
-function formatMoney(value) {
-  if (value == null) return dash;
-  try {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-    }).format(Number(value));
-  } catch {
-    return value;
-  }
-}
-
-function TextItem({ heading, text, border = '' }) {
-  return (
-    <div className={`${border} px-[15px]`}>
-      <CaptionSmall fontWeight="font-bold" textColor="text-sub-heading">
-        {heading}
-      </CaptionSmall>
-      <CaptionExtraSmall>{text}</CaptionExtraSmall>
-    </div>
-  );
-}
+import { ChevronRight } from 'lucide-react';
+import { getTransactions } from '@/services/transaction';
+import TransactionDetails from '@/pages/user-transactions/TransactionDetails';
 
 export default function UserTransaction() {
   const [openDetails, setOpenDetails] = useState(false);
+  const [selectedTransactionId, setSelectedTransactionId] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [transactions, setTransactions] = useState([]);
 
-  const DetailsContent = (
-    <>
-      <div className="flex w-full items-center justify-between gap-7 pb-[15px] border-b border-dashed border-border-primary">
-        <div className="w-[55%]">
-          <BodySmall textColor="text-sub-heading">
-            <span className="font-bold">Investment</span> - Long term Growth{' '}
+  useEffect(() => {
+    async function fetchTransactions() {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await getTransactions();
+        setTransactions(response);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchTransactions();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <DashboardLayout activeTab={4}>
+        <div className="flex items-center justify-center h-[80vh]">
+          <div className="animate-pulse flex flex-col gap-4 w-full max-w-2xl">
+            <div className="h-8 bg-slate-200 rounded w-1/4"></div>
+            <div className="h-20 bg-slate-200 rounded w-full"></div>
+            <div className="h-20 bg-slate-200 rounded w-full"></div>
+            <div className="h-20 bg-slate-200 rounded w-full"></div>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <DashboardLayout activeTab={4}>
+        <div className="flex flex-col items-center justify-center h-[80vh] text-center">
+          <div className="text-red-500 mb-2">
+            <svg
+              className="w-12 h-12 mx-auto"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+          </div>
+          <BodySmall textColor="text-red-500" fontWeight="font-bold">
+            {error}
           </BodySmall>
-          <CaptionExtraSmall extraClass="mt-1">July 11, 2025</CaptionExtraSmall>
+          <CaptionExtraSmall extraClass="mt-2">
+            Please try again later or contact support if the problem persists.
+          </CaptionExtraSmall>
         </div>
-        <BodySmall textColor="text-sub-heading" fontWeight="font-bold">
-          $3,000.00
-        </BodySmall>
-      </div>
-
-      <div className="py-[15px] border-b border-dashed border-border-primary flex items-center justify-between gap-3">
-        <div className="flex items-center justify-normal">
-          <TextItem heading="Order#" text="G123456" />
-          <div className="bg-border-primary h-7 w-[1px]" />
-          <TextItem heading="Order Placed" text="July 11, 2025" />
-          <div className="bg-border-primary h-7 w-[1px]" />
-          <TextItem heading="Funding source" text="City Bank 1473 (Checking)" />
-        </div>
-        <button
-          className="hidden tab:block py-3 px-6 border border-border-primary hover:bg-bg-dusky-plum-light text-sub-title text-sm font-display rounded-md font-semibold"
-          type="button"
-        >
-          Cancel
-        </button>
-      </div>
-
-      <div>
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="text-sub-heading text-xs sm:text-sm font-semibold">
-              <th className="text-left px-4 sm:px-6 py-3 border-b border-border-primary">Name</th>
-              <th className="text-center px-4 sm:px-6 py-3 border-b border-border-primary">
-                Quantity
-              </th>
-              <th className="text-center px-4 sm:px-6 py-3 border-b border-border-primary">
-                Price
-              </th>
-              <th className="text-right px-4 sm:px-6 py-3 border-b border-border-primary">
-                Amount
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200">
-            {rows.map((r, i) => (
-              <tr key={i} className="text-sub-heading text-xs">
-                <td className="px-4 sm:px-6 py-3">{r.name}</td>
-                <td className="px-4 sm:px-6 py-3 text-center tabular-nums">
-                  {r.quantity == null ? dash : r.quantity}
-                </td>
-                <td className="px-4 sm:px-6 py-3 text-center tabular-nums">
-                  {r.price == null ? dash : formatMoney(r.price)}
-                </td>
-                <td className="px-4 sm:px-6 py-3 text-right font-semibold tabular-nums">
-                  {formatMoney(r.amount)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </>
-  );
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout activeTab={4}>
       <div className="flex items-start gap-5 min-h-[80vh]">
         {/* LEFT: List */}
-        <div className="border border-border-primary rounded-xl p-5 w-full tab:w-[45%]">
-          <SmallHeading>Pending</SmallHeading>
-
-          <div className="mt-5 w-full">
-            <button
-              type="button"
-              onClick={() => setOpenDetails(true)}
-              className="flex w-full items-center justify-normal gap-7 hover:bg-bg-primary-2 p-1 rounded-md"
+        <div className="w-full tab:w-[45%] flex flex-col gap-4">
+          {transactions.map((transaction) => (
+            <div
+              key={transaction.investment_id}
+              className="border border-border-primary rounded-xl p-5 w-full hover:bg-bg-primary-2 cursor-pointer transition-colors"
             >
-              <div className="w-[55%] text-left">
-                <BodySmall textColor="text-sub-heading">
-                  <span className="font-bold">Investment</span> - Long term Growth{' '}
-                </BodySmall>
-                <CaptionExtraSmall extraClass="mt-1">July 11, 2025</CaptionExtraSmall>
-              </div>
-              <div className="flex w-[45%] items-center justify-between gap-7">
-                <BodySmall textColor="text-sub-heading" fontWeight="font-bold">
-                  $3,000.00
-                </BodySmall>
-                <div className="p-1 bg-bg-blush-mist-base rounded-md">
-                  <ChevronRight />
+              <SmallHeading>{transaction.status}</SmallHeading>
+
+              <div className="mt-5 w-full">
+                <div
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => {
+                    setSelectedTransactionId(transaction.investment_id);
+                    setOpenDetails(true);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      setSelectedTransactionId(transaction.investment_id);
+                      setOpenDetails(true);
+                    }
+                  }}
+                  className="flex w-full items-center justify-normal gap-7"
+                >
+                  <div className="w-[55%] text-left">
+                    <BodySmall textColor="text-sub-heading truncate">
+                      <span className="font-bold">{transaction.project_name}</span> -
+                      {transaction.company_name}
+                    </BodySmall>
+                    <CaptionExtraSmall extraClass="mt-1">
+                      {transaction.invest_date}
+                    </CaptionExtraSmall>
+                  </div>
+                  <div className="flex w-[45%] items-center justify-between gap-7">
+                    <BodySmall textColor="text-sub-heading" fontWeight="font-bold">
+                      ${transaction.invest_amount}
+                    </BodySmall>
+                    <div className="p-1 bg-bg-blush-mist-base rounded-md">
+                      <ChevronRight />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </button>
-          </div>
+            </div>
+          ))}
         </div>
-
-        {/* RIGHT (desktop/tab+): Static details pane */}
-        <div className="hidden tab:block border border-border-primary rounded-xl p-5 w-[55%]">
-          {DetailsContent}
-        </div>
+        {/* Transaction Details Component - handles both desktop and mobile views */}
+        <TransactionDetails
+          isOpen={openDetails}
+          onClose={() => {
+            setOpenDetails(false);
+            setSelectedTransactionId(null);
+          }}
+          transactionId={selectedTransactionId}
+          isModal={false}
+        />
       </div>
 
-      {/* MODAL (small & tab only): overlayed details */}
-      <div
-        className={`fixed inset-0 z-50 ${openDetails ? 'block' : 'hidden'} tab:hidden`}
-        aria-hidden={!openDetails}
-      >
-        {/* Backdrop */}
-        <div className="absolute inset-0 bg-black/40" onClick={() => setOpenDetails(false)} />
-        {/* Modal card */}
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="relative mx-auto mt-10 w-[92%] max-w-xl rounded-2xl border border-border-primary bg-white p-5 shadow-xl"
-        >
-          <div className="flex items-center justify-between mb-2">
-            <SmallHeading>Details</SmallHeading>
-            <button
-              type="button"
-              onClick={() => setOpenDetails(false)}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-md hover:bg-bg-primary-2"
-              aria-label="Close"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-          {DetailsContent}
-        </div>
-      </div>
+      {/* Mobile Modal Version */}
+      <TransactionDetails
+        isOpen={openDetails}
+        onClose={() => {
+          setOpenDetails(false);
+          setSelectedTransactionId(null);
+        }}
+        transactionId={selectedTransactionId}
+        isModal={true}
+      />
 
       <div className="mt-10 py-5 border-t border-t-border-primary">
         <CaptionExtraSmall>

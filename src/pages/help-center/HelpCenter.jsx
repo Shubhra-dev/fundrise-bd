@@ -1,9 +1,9 @@
+import { useEffect, useState } from 'react';
 import BottomButtonRoundedWithSeperator from '../../components/box/BottomButtonRoundedWithSeperator';
-import RoundedButton from '../../components/buttons/RoundedButton';
-import BodySmall from '../../components/text/BodySmall';
-import Heading from '../../components/text/Heading';
 import SectionLayout from '../../ui/SectionLayout';
 import HelpCenterHero from './HelpCenterHero';
+import BodyBase from '@/components/text/BodyBase';
+import { getHelpCenterPosts } from '@/services/pages';
 export const helpCenterArticles = [
   {
     title: 'About Fundrise',
@@ -44,15 +44,39 @@ export const helpCenterArticles = [
 ];
 
 function HelpCenter() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [search, setSearch] = useState('');
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await getHelpCenterPosts(search);
+        setPosts(response.result.posts);
+        setIsError(null);
+      } catch (err) {
+        setIsError(err.message || 'An error occurred while fetching data');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [search > 2]);
   return (
     <>
-      <HelpCenterHero />
+      <HelpCenterHero search={search} setSearch={setSearch} />
       <SectionLayout>
-        <div className="w-full grid sm:grid-cols-2 tab:grid-cols-3 items-stretch justify-normal gap-8">
-          {helpCenterArticles.map((item, idx) => (
-            <BottomButtonRoundedWithSeperator key={idx} text={item.text} title={item.title} />
-          ))}
-        </div>
+        {!isLoading && !isError && (
+          <div className="w-full grid sm:grid-cols-2 tab:grid-cols-3 items-stretch justify-normal gap-8">
+            {posts.map((item, idx) => (
+              <BottomButtonRoundedWithSeperator key={idx} text={item.excerpt} title={item.title} />
+            ))}
+          </div>
+        )}
+        {isLoading && <BodyBase>Loading posts....</BodyBase>}
+        {isError && <BodyBase>Something went wrong!</BodyBase>}
       </SectionLayout>
     </>
   );

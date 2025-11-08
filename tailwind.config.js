@@ -4,6 +4,20 @@ export default {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      keyframes: {
+        slideNext: {
+          '0%': { transform: 'translateX(0)', opacity: '1' },
+          '100%': { transform: 'translateX(-100%)', opacity: '0' },
+        },
+        slideIn: {
+          '0%': { transform: 'translateX(100%)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+      },
+      animation: {
+        'slide-next': 'slideNext 0.6s ease-in-out',
+        'slide-in': 'slideIn 0.6s ease-in-out',
+      },
       fontFamily: {
         sans: ['Sora', 'sans-serif'], // default body font
         sora: ['Sora', 'sans-serif'], // default body font

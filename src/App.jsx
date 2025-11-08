@@ -41,7 +41,7 @@ const router = createBrowserRouter([
       { path: '/why-fundrise', element: <WhyFundrise /> },
       { path: '/how-it-works', element: <HowItWorks /> },
       { path: '/about-us', element: <AboutUs /> },
-      { path: '/product/details/:prod_id', element: <ProductDetails /> },
+      { path: '/product/details/:slug', element: <ProductDetails /> },
       { path: '/letters-to-investor', element: <LettersToInvestor /> },
       { path: '/letters-to-investor/details/:letter_id', element: <LetterToInvestorDetails /> },
     ],

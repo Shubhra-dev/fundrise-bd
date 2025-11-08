@@ -1,16 +1,6 @@
 import BodyBase from '../../components/text/BodyBase';
 
-export default function AnnualReturnsTable() {
-  const data = [
-    { year: 2024, fundrise: '5.75%', reits: '4.33%' },
-    { year: 2023, fundrise: '-7.45%', reits: '11.49%' },
-    { year: 2022, fundrise: '1.50%', reits: '-25.10%' },
-    { year: 2021, fundrise: '22.99%', reits: '39.88%' },
-    { year: 2020, fundrise: '7.31%', reits: '-5.86%' },
-    { year: 2019, fundrise: '9.16%', reits: '28.07%' },
-    { year: 2018, fundrise: '8.81%', reits: '-4.10%' },
-  ];
-
+export default function AnnualReturnsTable({ data }) {
   return (
     <div className="w-full">
       <BodyBase extraClass="mb-2" textColor={`text-title`} fontWeight={`font-semibold`}>
@@ -29,14 +19,14 @@ export default function AnnualReturnsTable() {
             <tr key={idx} className="border-b border-b-gray-800 border-dotted text-sm">
               <td className="px-4 py-2 font-bold">{row.year}</td>
               <td
-                className={`px-4 py-2 text-right ${row.fundrise.includes('-') ? 'text-red-500' : ''}`}
+                className={`px-4 py-2 text-right ${row.fundrise_return < 0 ? 'text-red-500' : ''}`}
               >
-                {row.fundrise}
+                {row.fundrise_return}
               </td>
               <td
-                className={`px-4 py-2 text-right ${row.reits.includes('-') ? 'text-red-500' : ''}`}
+                className={`px-4 py-2 text-right ${row.public_reits_return < 0 ? 'text-red-500' : ''}`}
               >
-                {row.reits}
+                {row.public_reits_return}
               </td>
             </tr>
           ))}
