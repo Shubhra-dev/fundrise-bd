@@ -25,6 +25,9 @@ export async function getProjectDetails(slug) {
 export async function getHistoricalData() {
   return await publicGet(`${BASE_URL}/fundrise-compares`);
 }
+export async function getRealEstateData() {
+  return await publicGet(`${BASE_URL}/pages/real-estate`);
+}
 
 export async function getConsistantGrowth() {
   return await publicGet(`${BASE_URL}/consistent-growth`);

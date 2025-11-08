@@ -74,7 +74,7 @@ function TextAndImageSection({
     </div>
   );
 }
-function OurStrategy() {
+function OurStrategy({ data }) {
   return (
     <SectionLayout>
       <div className="flex flex-col tab:flex-row items-end justify-normal gap-5 sm:gap-[37px]">
@@ -90,9 +90,13 @@ function OurStrategy() {
           </BodyBase>
         </div>
         <div className="w-full tab:w-1/2 flex items-start justify-normal gap-8">
-          <IconBox img={NoteBook} count={`224`} text={`Active projects`} />
-          <IconBox img={FileCheck} count={`235`} text={`Completed projects`} />
-          <IconBox img={Archive} count={`$7+ B`} text={`Total portfolio value*`} />
+          <IconBox img={NoteBook} count={data?.active_projects} text={`Active projects`} />
+          <IconBox img={FileCheck} count={data?.completed_projects} text={`Completed projects`} />
+          <IconBox
+            img={Archive}
+            count={data?.total_portfolio_value}
+            text={`Total portfolio value*`}
+          />
         </div>
       </div>
       <TextAndImageSection
@@ -104,8 +108,16 @@ function OurStrategy() {
         text={`A variety of trends have now led to a good share of the population in need of more living space which they can rent for some time. Currently, this demand for single-family rentals (SFRs) has helped drive a level of asset price appreciation uncommon in the world of real estate. By purchasing these homes in volume directly from homebuilders and leasing them up ourselves as stabilized communities, we believe we can get better prices—and returns—than buying the “finished product.”`}
       >
         <div className="flex items-center justify-normal gap-9">
-          <IconBox img={BuildingPurple} text={`Single-family homes`} count={`3,471`} />
-          <IconBox img={ChartLinePurple} text={`U.S. Markets`} count={`30`} />
+          <IconBox
+            img={BuildingPurple}
+            text={`Single-family homes`}
+            count={data?.build_for_rent_single_family_homes}
+          />
+          <IconBox
+            img={ChartLinePurple}
+            text={`U.S. Markets`}
+            count={data?.build_for_rent_us_markets}
+          />
         </div>
       </TextAndImageSection>
       <TextAndImageSection
@@ -118,8 +130,16 @@ function OurStrategy() {
         text={`With a boom in remote work and business-friendly local governments courting employers, more affordably-priced suburban apartment communities have generally experienced stable or growing demand. We’ve paid a lower price for these investments relative to their earnings, and expect a higher income yield in the near term, as well as the potential for greater appreciation over the long term to the extent that demand increases in the future.`}
       >
         <div className="flex items-center justify-normal gap-9">
-          <IconBox img={BuildingPurple} text={`Residential units`} count={`8,962`} />
-          <IconBox img={ChartLinePurple} text={`U.S. Markets`} count={`30`} />
+          <IconBox
+            img={BuildingPurple}
+            text={`Residential units`}
+            count={data?.multifamily_apartments_residential_units}
+          />
+          <IconBox
+            img={ChartLinePurple}
+            text={`U.S. Markets`}
+            count={data?.multifamily_apartments_us_markets}
+          />
         </div>
       </TextAndImageSection>
       <TextAndImageSection
@@ -131,8 +151,16 @@ function OurStrategy() {
         text={`Propelled by the popularity of e-Commerce, a growing need for logistical facilities and last-mile distribution centers near largely populated areas has made industrial space an attractive long-term investment. Our goal with these investments is to generate a consistent income from commercial tenants, and position ourselves to capture any appreciation in the value of these properties in supply-constrained areas.`}
       >
         <div className="flex items-center justify-normal gap-9">
-          <IconBox img={BuildingPurple} text={`Square feet for lease`} count={`2,310,800`} />
-          <IconBox img={ChartLinePurple} text={`U.S. Markets`} count={`30`} />
+          <IconBox
+            img={BuildingPurple}
+            text={`Square feet for lease`}
+            count={data?.trades_industrial_properties_square_footage_for_lease}
+          />
+          <IconBox
+            img={ChartLinePurple}
+            text={`U.S. Markets`}
+            count={data?.trades_industrial_properties_us_markets}
+          />
         </div>
       </TextAndImageSection>
     </SectionLayout>

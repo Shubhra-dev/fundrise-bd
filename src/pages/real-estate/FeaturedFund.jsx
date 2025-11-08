@@ -31,7 +31,7 @@ function TextBox({ textColor, prefix, postfix, text, title }) {
   );
 }
 
-function FeaturedFund() {
+function FeaturedFund({ data }) {
   return (
     <SectionLayout bg={`bg-bg-soft-orchid-dark`}>
       <div className="flex flex-col sm:flex-row items-start justify-normal gap-3.5">
@@ -80,16 +80,42 @@ function FeaturedFund() {
             build-for-rent housing communities and multifamily and industrial assets in the Sunbelt.
           </BodyBase>
           <div className="hidden tab:grid pt-14  grid-cols-3 items-stretch gap-10">
-            <TextBox text={`Annualized return since inception`} title={`4.4`} postfix={`%`} />
-            <TextBox text={`Net asset Value (NAV)`} title={`1.2`} prefix={`$`} postfix={`B`} />
-            <TextBox text={`Annualized distribution rate`} title={`0.21`} postfix={`%`} />
+            <TextBox
+              text={`Annualized return since inception`}
+              title={data?.annualized_return_since_inception.slice(0, -1)}
+              postfix={`%`}
+            />
+            <TextBox
+              text={`Net asset Value (NAV)`}
+              title={data?.net_asset_value.slice(1, -1)}
+              prefix={`$`}
+              postfix={data?.net_asset_value.slice(-1)}
+            />
+            <TextBox
+              text={`Annualized distribution rate`}
+              title={data?.annualized_distribution_rate.slice(0, -1)}
+              postfix={`%`}
+            />
           </div>
         </div>
       </div>
       <div className="grid tab:hidden pt-14  sm:grid-cols-3 items-stretch gap-2.5 sm:gap-10">
-        <TextBox text={`Annualized return since inception`} title={`7.6`} postfix={`%`} />
-        <TextBox text={`Net asset Value (NAV)`} title={`616`} prefix={`$`} postfix={`M`} />
-        <TextBox text={`Annualized distribution rate`} title={`7.51`} postfix={`%`} />
+        <TextBox
+          text={`Annualized return since inception`}
+          title={data?.annualized_return_since_inception.slice(0, -1)}
+          postfix={`%`}
+        />
+        <TextBox
+          text={`Net asset Value (NAV)`}
+          title={data?.net_asset_value.slice(1, -1)}
+          prefix={`$`}
+          postfix={data?.net_asset_value.slice(-1)}
+        />
+        <TextBox
+          text={`Annualized distribution rate`}
+          title={data?.annualized_return_since_inception.slice(0, -1)}
+          postfix={`%`}
+        />
       </div>
     </SectionLayout>
   );

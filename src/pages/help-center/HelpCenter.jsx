@@ -62,8 +62,8 @@ function HelpCenter() {
       }
     };
 
-    fetchData();
-  }, [search > 2]);
+    if (search.length === 0 || search.length > 2) fetchData();
+  }, [search]);
   return (
     <>
       <HelpCenterHero search={search} setSearch={setSearch} />
@@ -71,7 +71,12 @@ function HelpCenter() {
         {!isLoading && !isError && (
           <div className="w-full grid sm:grid-cols-2 tab:grid-cols-3 items-stretch justify-normal gap-8">
             {posts.map((item, idx) => (
-              <BottomButtonRoundedWithSeperator key={idx} text={item.excerpt} title={item.title} />
+              <BottomButtonRoundedWithSeperator
+                slug={item.slug}
+                key={idx}
+                text={item.excerpt}
+                title={item.title}
+              />
             ))}
           </div>
         )}
