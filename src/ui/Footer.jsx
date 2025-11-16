@@ -14,6 +14,7 @@ import BodyBase from '../components/text/BodyBase';
 import { FaChevronRight } from 'react-icons/fa';
 import LinkHolder from './LinkHolder';
 import PrimaryButton from '../components/buttons/PrimaryButton';
+import Newsletter from '@/ui/Newsletter';
 function Footer() {
   return (
     <>
@@ -97,45 +98,25 @@ function Footer() {
               <div>
                 <BodyBase fontWeight={`font-bold`}>Useful Links</BodyBase>
                 <div className="mt-[15px] flex flex-col items-start justify-normal gap-2">
-                  <LinkHolder text={`Footer Item`} />
-                  <LinkHolder text={`Footer Item`} />
-                  <LinkHolder text={`Footer Item`} />
-                  <LinkHolder text={`Footer Item`} />
-                  <LinkHolder text={`Footer Item`} />
-                  <LinkHolder text={`Footer Item`} />
+                  <LinkHolder text={`Home`} link="/" />
+                  <LinkHolder text={`Venture`} link="/venture" />
+                  <LinkHolder text={`Private Credit`} link="/private-credit" />
+                  <LinkHolder text={`Real Estate`} link="/real-estate" />
+                  <LinkHolder text={`Client Return`} link="/client-return" />
                 </div>
               </div>
               <div>
                 <BodyBase fontWeight={`font-bold`}>Company</BodyBase>
                 <div className="mt-[15px] flex flex-col items-start justify-normal gap-2">
-                  <LinkHolder text={`Footer Item`} />
-                  <LinkHolder text={`Footer Item`} />
-                  <LinkHolder text={`Footer Item`} />
-                  <LinkHolder text={`Footer Item`} />
-                  <LinkHolder text={`Footer Item`} />
-                  <LinkHolder text={`Footer Item`} />
+                  <LinkHolder text={`Help Center`} link="/help-center" />
+                  <LinkHolder text={`Why Fundrise`} link="/why-fundrise" />
+                  <LinkHolder text={`Letters to Investors`} link="/letters-investor" />
+                  <LinkHolder text={`How It Works`} link="/how-it-works" />
+                  <LinkHolder text={`About Us`} link="/about-us" />
                 </div>
               </div>
             </div>
-            <div className="mt-[50px] flex flex-col sm:flex-row items-center justify-normal gap-5">
-              <BodyBase fontWeight={`font-bold`} extraClass={`w-full sm:w-[35%]`}>
-                Newsletter To Get Updated The Latest News
-              </BodyBase>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                }}
-                className="w-full sm:w-[65%] flex items-center justify-normal gap-1.5"
-              >
-                <input
-                  type="email"
-                  name="email"
-                  className="px-5 py-3 w-[60%] text-sm text-sub-title bg-bg-soft-orchid-light"
-                  placeholder="Enter your email"
-                />
-                <PrimaryButton label="Subscribe Now" textSize="text-base" />
-              </form>
-            </div>
+            <Newsletter />
           </div>
         </div>
       </SectionLayout>

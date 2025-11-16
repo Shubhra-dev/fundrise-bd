@@ -118,11 +118,6 @@ function DashboardLayout({ activeTab = 1, children }) {
               className={`${activeTab === 6 ? 'text-btext-2-dark' : 'text-paragraph'} text-xl`}
             />
           </MenuItem>
-          <MenuItem name={`Documents`} active={activeTab === 7}>
-            <HiOutlineClipboardDocument
-              className={`${activeTab === 7 ? 'text-btext-2-dark' : 'text-paragraph'} text-xl`}
-            />
-          </MenuItem>
           <MenuItem link={`/user/calculator`} name={`Calculator`} active={activeTab === 8}>
             <BiCalculator
               className={`${activeTab === 8 ? 'text-btext-2-dark' : 'text-paragraph'} text-xl`}

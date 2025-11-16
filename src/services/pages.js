@@ -1,5 +1,5 @@
 import { BASE_URL } from '@/services/BASE_URL';
-import { publicGet } from '@/utils/http';
+import { publicGet, publicPost } from '@/utils/http';
 
 export async function getProjects({
   searchValue = '',
@@ -40,6 +40,9 @@ export async function getConsistantGrowth() {
 }
 export async function getFaQ(page) {
   return await publicGet(`${BASE_URL}/faqs?page=${page}`);
+}
+export async function postSubcription(email) {
+  return await publicPost(`${BASE_URL}/subscription`, { email: email });
 }
 
 export async function getHelpCenterPosts({

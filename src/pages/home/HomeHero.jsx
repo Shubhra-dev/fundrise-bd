@@ -6,6 +6,8 @@ import SubHeading from '../../components/text/SubHeading';
 import CaptionBase from '../../components/text/CaptionBase';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import { GoStarFill } from 'react-icons/go';
+import { Link } from 'react-router-dom';
+
 function HomeHero() {
   return (
     <SectionLayout bg={`bg-gradient-to-b from-white to-bg-primary-2`}>
@@ -21,7 +23,9 @@ function HomeHero() {
           <Title>Invest in a better alternative</Title>
           <SubHeading fontWeight={`font-semibold`}>Invest in a better alternative</SubHeading>
           <div className="py-10 flex items-center justify-normal gap-5 laptop:gap-[30px] w-full">
-            <PrimaryButton label="Sign Up" />
+            <Link to="/auth/register">
+              <PrimaryButton label="Sign Up" />
+            </Link>
             <div className="sm:w-[300px]">
               <CaptionBase>
                 Start investing in less than 5 minutes and with as little as $10.

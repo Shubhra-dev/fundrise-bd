@@ -13,19 +13,19 @@ function WaysToInvest() {
           text={`Open a standard account and build a portfolio of alternative investments.`}
           title={`Personal investment account`}
           buttonLabel={`Open your accounts`}
-          onClick={() => {}}
+          link="/auth/register"
         />
         <BottomButtonRoundedBox
           text={`Roll over an existing retirement account or open a new Traditional or Roth IRA.`}
           title={`Tax-advantaged investing`}
           buttonLabel={`Invest your retirement`}
-          onClick={() => {}}
+          link="/user/invests"
         />
         <BottomButtonRoundedBox
           text={`Work with an RIA? We can give them access to invest on your behalf.`}
           title={`Through your advisor`}
           buttonLabel={`Learn More`}
-          onClick={() => {}}
+          link="/why-fundrise"
         />
       </div>
     </SectionLayout>

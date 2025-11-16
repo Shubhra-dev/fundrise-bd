@@ -1,7 +1,8 @@
 import Heading from '../text/Heading';
 import BodySmall from '../text/BodySmall';
 import RoundedButton from '../buttons/RoundedButton';
-function ChamferBorderedCard({ title, text, image, buttonLabel }) {
+import { Link } from 'react-router-dom';
+function ChamferBorderedCard({ title, text, image, buttonLabel, link }) {
   return (
     <div className="p-[1px] bg-gray-300 rounded-md chamfer-tr-6 h-full">
       <div className="py-[12px] px-[14px] bg-white rounded-md chamfer-tr-6 h-full  flex flex-col sm:justify-between">
@@ -17,7 +18,9 @@ function ChamferBorderedCard({ title, text, image, buttonLabel }) {
             alt="card image"
             className="mb-4 chamfer-tr-6 rounded-md object-cover w-full h-72"
           />
-          <RoundedButton label={buttonLabel} />
+          <Link to={link}>
+            <RoundedButton label={buttonLabel} />
+          </Link>
         </div>
       </div>
     </div>

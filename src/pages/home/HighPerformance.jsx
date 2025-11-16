@@ -5,6 +5,7 @@ import SectionLayout from '../../ui/SectionLayout';
 import HighPer from '../../assets/HighPer.jpg';
 import CaptionBase from '../../components/text/CaptionBase';
 import Title from '../../components/text/Title';
+import { Link } from 'react-router-dom';
 
 function HighPerformance() {
   return (
@@ -21,7 +22,9 @@ function HighPerformance() {
           </BodyBase>
         </div>
         <div>
-          <PrimaryButton bg="bg-bg-cool-irish-base" rightIcon={true} label="Learn More" />
+          <Link to="/how-it-works">
+            <PrimaryButton bg="bg-bg-cool-irish-base" rightIcon={true} label="Learn More" />
+          </Link>
         </div>
       </div>
       <div className="my-10 bg-border-brand-1 p-2 w-full rounded-md chamfer-tr-5">
