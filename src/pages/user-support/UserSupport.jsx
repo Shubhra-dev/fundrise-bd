@@ -4,6 +4,7 @@ import BodySmall from '../../components/text/BodySmall';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import DashboardLayout from '../user-dashboard/DashboardLayout';
 import { useState } from 'react';
+import { postSupportData } from '@/services/dashboard';
 // import { supportFormSubmit } from '../../services/dashboard';
 
 function UserSupport() {
@@ -20,8 +21,7 @@ function UserSupport() {
     setIsLoading(true);
     setIsError({ state: false, msg: '' });
     try {
-      // const result = await supportFormSubmit(userData);
-      var result;
+      const result = await postSupportData(userData);
       if (result.success) {
         setUserData({
           type: '',

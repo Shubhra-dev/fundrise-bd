@@ -4,7 +4,7 @@ import SubTitle from '../../components/text/SubTitle';
 import BodySmall from '../../components/text/BodySmall';
 import InvestmentTable from './InvestmentTable';
 import CaptionExtraSmall from '../../components/text/CaptionExtraSmall';
-function IncomeThrough() {
+function IncomeThrough({ data }) {
   return (
     <SectionLayout>
       <div className="flex items-center justify-normal gap-[52px]">
@@ -16,11 +16,12 @@ function IncomeThrough() {
             returns through Fundrise and do not include appreciation over time.
           </BodySmall>
           <div className="my-10">
-            <InvestmentTable />
+            <InvestmentTable data={data?.income_through_dividends} />
           </div>
           <div className="bg-bg-primary-2 w-full rounded-md py-7 px-5">
             <SubTitle align={`text-center`}>
-              <span className="text-btext-3-base">$</span>436,774,590.68
+              <span className="text-btext-3-base">$</span>
+              {data?.net_distributions_earned_by_advisory_clients}
             </SubTitle>
             <CaptionExtraSmall
               textColor={`text-heading`}

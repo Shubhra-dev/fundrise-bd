@@ -7,6 +7,8 @@ import BarChartComponent from './BarChartComponent';
 import PieDistributionChart from './PieDistributionChart';
 import DOMPurify from 'dompurify';
 import SubHeading from '../../components/text/SubHeading';
+import he from 'he';
+import RenderRichText from '@/pages/letter-to-investor-details/RenderRichText';
 
 function ContentContainer({ contents = [] }) {
   return (
@@ -15,34 +17,29 @@ function ContentContainer({ contents = [] }) {
         <div className="w-full">
           {contents.map((item, index) => (
             <React.Fragment key={index}>
-              {item.content_type === `key_takeaways` && (
+              {item.type === `key_takeaways` && (
                 <KeyTakeaways editorData={item.data} title={item.title} id={index} />
               )}
-              {item.content_type === `text` && (
-                <div className="mt-16" id={index}>
+              {item.type === `text` && (
+                <div className="mt-5" id={index}>
                   <SubHeading>{item.title}</SubHeading>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: DOMPurify.sanitize(item.data),
-                    }}
-                    className="mt-5 text-textParagraph dark:text-textParagraphDark font-normal text-base font-workSans"
-                  ></div>
+                  <RenderRichText html={item?.data} />
                 </div>
               )}
               <div className="mt-16">
-                {item.content_type === `graph` && item.data.chart_type === 'line' && (
+                {item.type === `graph` && item.data.chart_type === 'line' && (
                   <PerformanceChart content={item} id={index} />
                 )}
-                {/* {item.content_type === `graph` && item.data.chart_type === '' && (
+                {/* {item.type === `graph` && item.data.chart_type === '' && (
                   <AIPrimaryFundingChart id={index} />
                 )} */}
-                {item.content_type === `graph` && item.data.chart_type === 'bar' && (
+                {item.type === `graph` && item.data.chart_type === 'bar' && (
                   <BarChartComponent data={item.data} title={item.title} id={index} />
                 )}
-                {item.content_type === `graph` && item.data.chart_type === 'bar_distributed' && (
+                {item.type === `graph` && item.data.chart_type === 'bar_distributed' && (
                   <IOIDistributionChart data={item.data} title={item.title} id={index} />
                 )}
-                {item.content_type === `graph` && item.data.chart_type === 'pie' && (
+                {item.type === `graph` && item.data.chart_type === 'pie' && (
                   <PieDistributionChart data={item.data} title={item.title} id={index} />
                 )}
               </div>

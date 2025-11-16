@@ -9,7 +9,7 @@ import Grid4 from '../../assets/Grid4.jpg';
 import Person from '../../assets/Person.svg';
 import BodySmall from '../../components/text/BodySmall';
 
-function SetBetterWay() {
+function SetBetterWay({ data }) {
   return (
     <SectionLayout rounded="rounded-t-[30px]">
       <div className="flex flex-col-reverse tab:flex-row items-center justify-normal gap-10">
@@ -52,20 +52,17 @@ function SetBetterWay() {
       <div className="mt-12 sm:mt-16 tab:mt-24 tab:px-10 py-10 sm:py-16 flex flex-col sm:flex-row items-center justify-center gap-10 sm:gap-16 tab:gap-20">
         <div className="w-52 h-52 rounded-full bg-bg-soft-orchid-base relative">
           <img
-            src={Person}
+            src={data?.ceo_profile_image}
             alt="person"
             className="h-44 w-44 rounded-full object-center absolute -bottom-1 -right-2"
           />
         </div>
         <div className="sm:w-2/3">
-          <BodyBase>
-            “Our goal is to build a better financial system for the individual investor — one that
-            is simpler, more reliable, lower cost and transparent.”
-          </BodyBase>
+          <BodyBase>{data?.ceo_description}</BodyBase>
           <SubHeading extraClass={`mt-5`} textColor={`text-btext-1-base`} fontWeight={`font-bold`}>
-            Ben Millers
+            {data?.ceo_name}
           </SubHeading>
-          <BodyBase>Co-founder & CEO</BodyBase>
+          <BodyBase>{data?.ceo_designation}</BodyBase>
         </div>
       </div>
       <div className="tab:w-3/4 m-auto mb-[200px] sm:mb-[150px] tab:mb-24">

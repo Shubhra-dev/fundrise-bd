@@ -27,6 +27,8 @@ import ForgotPassword from '@/pages/forgot-pasword/ForgotPassword';
 import UserSupport from '@/pages/user-support/UserSupport';
 import UserProfile from '@/pages/user-profile/UserProfile';
 import UserSettings from '@/pages/user-settings/UserSettings';
+import UserFlowDiagram from '@/pages/private-credit/my-forest-user-flows';
+import FlowchartViewer from '@/pages/private-credit/my-forest-flowcharts';
 
 const router = createBrowserRouter([
   {
@@ -43,7 +45,7 @@ const router = createBrowserRouter([
       { path: '/about-us', element: <AboutUs /> },
       { path: '/product/details/:slug', element: <ProductDetails /> },
       { path: '/letters-to-investor', element: <LettersToInvestor /> },
-      { path: '/letters-to-investor/details/:letter_id', element: <LetterToInvestorDetails /> },
+      { path: '/letters-to-investor/details/:slug', element: <LetterToInvestorDetails /> },
     ],
   },
   { path: '/auth/login', element: <Login /> },

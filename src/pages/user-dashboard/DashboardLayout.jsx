@@ -20,9 +20,11 @@ import { FaRegBell } from 'react-icons/fa';
 import MenuAlt from '../../assets/icons/MenuAlt.svg';
 import Profile from '../../assets/Profile.jpg';
 import { Toaster } from 'react-hot-toast';
+import { useSelector } from 'react-redux';
 
 function DashboardLayout({ activeTab = 1, children }) {
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth);
 
   // Mobile/off-canvas state
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -209,7 +211,10 @@ function DashboardLayout({ activeTab = 1, children }) {
               <div className="text-base sm:text-xl font-display font-semibold">Start Up</div>
             </div>
             <div className="flex items-center justify-normal gap-3 sm:gap-8">
-              <button className="py-2.5 sm:py-4 px-4 sm:px-6 bg-bg-soft-orchid-dark text-sm font-bold text-white font-display rounded-xl">
+              <button
+                onClick={() => navigate(`/user/invest`)}
+                className="py-2.5 sm:py-4 px-4 sm:px-6 bg-bg-soft-orchid-dark text-sm font-bold text-white font-display rounded-xl"
+              >
                 Add Fund +
               </button>
 
@@ -219,15 +224,15 @@ function DashboardLayout({ activeTab = 1, children }) {
                 {/* Profile block hidden below md to save space */}
                 <div className="items-center justify-normal gap-3 hidden tab:flex">
                   <img
-                    src={Profile}
+                    src={user.profileImage}
                     alt="profile image"
                     className="w-10 h-10 sm:w-14 sm:h-14 rounded-full object-cover"
                   />
                   <div className="hidden tab:block">
-                    <BodyBase fontWeight={`font-semibold`}>Shahriar Zaman</BodyBase>
-                    <CaptionSmall title={'shariarpranto@gmail.com'}>
+                    <BodyBase fontWeight={`font-semibold`}>{user.userName}</BodyBase>
+                    {/* <CaptionSmall title={'shariarpranto@gmail.com'}>
                       {shortEmail(`shariarpranto@gmail.com`)}
-                    </CaptionSmall>
+                    </CaptionSmall> */}
                   </div>
                 </div>
 

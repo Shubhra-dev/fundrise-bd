@@ -1,24 +1,30 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import BodyBase from '@/components/text/BodyBase';
 import ProjectCard from '@/pages/user-invests/ProjectCard';
-import { ChevronDown, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import BodySmall from '@/components/text/BodySmall';
 import RoundedButton from '@/components/buttons/RoundedButton';
 import CaptionExtraSmall from '@/components/text/CaptionExtraSmall';
+import BuildingIcon from '@/assets/icons/Building_02.svg';
+import FileCheckIcon from '@/assets/icons/FileCheck.svg';
+import Heading from '@/components/text/Heading';
+import { getInvestProjects } from '@/services/investment';
 
-function SelectInput({ name, options }) {
+function SelectInput({ name, options, value, setValue }) {
   return (
     <div className="relative border border-border-primary rounded-md">
       <select
         name={name}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
         className="text-sub-heading w-full appearance-none px-5 py-[15px] rounded-md"
       >
         <option value="" className="capitalize">
           {name}
         </option>
-        {options?.map((o) => (
-          <option key={o} value={o}>
-            {o}
+        {(options || []).map((o) => (
+          <option key={o.id} value={o.id}>
+            {o.title}
           </option>
         ))}
       </select>
@@ -27,124 +33,183 @@ function SelectInput({ name, options }) {
   );
 }
 
-const projects = [
-  {
-    title: 'Assure Imperial Heights',
-    developer: 'Assure Group',
-    inceptionYear: 2025,
-    netAssetValue: '৳2,800,000,000',
-    netAssetValueBDT: 2800000000,
-    projectType: 'Residential',
-    location: 'Banani, Dhaka',
-  },
-  {
-    title: 'Downtown Heights',
-    developer: 'Dom-Inno Builders Ltd.',
-    inceptionYear: 2024,
-    netAssetValue: '৳3,400,000,000',
-    netAssetValueBDT: 3400000000,
-    projectType: 'Residential',
-    location: 'Dhanmondi, Dhaka',
-  },
-  {
-    title: 'Navana Pristine Pavilion',
-    developer: 'Navana Real Estate Ltd.',
-    inceptionYear: 2013,
-    netAssetValue: '৳4,200,000,000',
-    netAssetValueBDT: 4200000000,
-    projectType: 'Residential',
-    location: 'Bashundhara R/A, Dhaka',
-  },
-  {
-    title: 'Akash Tower',
-    developer: 'Anwar Landmark Ltd.',
-    inceptionYear: 2022,
-    netAssetValue: '৳5,600,000,000',
-    netAssetValueBDT: 5600000000,
-    projectType: 'Commercial',
-    location: 'Uttara, Dhaka',
-  },
-  {
-    title: 'The Bay’s Edgewater',
-    developer: 'Bay Developments Ltd.',
-    inceptionYear: 2016,
-    netAssetValue: '৳6,700,000,000',
-    netAssetValueBDT: 6700000000,
-    projectType: 'Luxury Residential',
-    location: 'Gulshan 2, Dhaka',
-  },
-  {
-    title: 'Shanta Western Tower',
-    developer: 'Shanta Holdings Ltd.',
-    inceptionYear: 2015,
-    netAssetValue: '৳7,800,000,000',
-    netAssetValueBDT: 7800000000,
-    projectType: 'Commercial',
-    location: 'Tejgaon, Dhaka',
-  },
-];
+export default function UserInvestStepTwo({ setCurrentPage, onContinue, setSelected, selected }) {
+  // array of project.name
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [company, setCompany] = useState('');
+  const [type, setType] = useState('');
+  const [location, setLocation] = useState('');
+  const [data, setData] = useState({
+    projects: [],
+    companies: [],
+    asset_types: [],
+    locations: [],
+    pagination: null,
+  });
+  console.log(location, type, company);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
 
-export default function UserInvestStepTwo({ setCurrentPage, onContinue }) {
-  const [selected, setSelected] = useState([]); // array of titles
+        const response = await getInvestProjects({
+          projectCompanyId: company,
+          assetTypeId: type,
+          location: location,
+        });
+
+        // Safely handle response shape
+        const result = response?.result || {};
+
+        setData({
+          projects: result.projects || [],
+          companies: result.companies || [],
+          asset_types: result.asset_types || [],
+          locations: result.locations || [],
+          pagination: result.pagination || null,
+        });
+      } catch (err) {
+        console.error(err);
+        setError(err?.message || 'Failed to fetch projects');
+        setData({
+          projects: [],
+          companies: [],
+          asset_types: [],
+          locations: [],
+          pagination: null,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [company, type, location]);
 
   const byTitle = useMemo(() => new Set(selected), [selected]);
 
   const toggleProject = (p) => {
     setSelected((prev) =>
-      prev.includes(p.title) ? prev.filter((t) => t !== p.title) : [...prev, p.title]
+      prev.includes(p.name) ? prev.filter((t) => t !== p.name) : [...prev, p.name]
     );
   };
 
-  const selectedProjects = useMemo(() => projects.filter((p) => byTitle.has(p.title)), [byTitle]);
+  const selectedProjects = useMemo(() => {
+    const projects = data?.projects || [];
+    return projects.filter((p) => byTitle.has(p.name));
+  }, [data, byTitle]);
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row items-center justify-normal gap-12">
-        <BodyBase textColor="text-sub-heading" extraClass="w-full sm:w-[35%]">
-          PROJECTS open for investment
-        </BodyBase>
-        <div className="grid grid-cols-1 sm:grid-cols-3 w-full sm:w-[65%] items-center justify-normal gap-5">
-          <SelectInput name="Company" />
-          <SelectInput name="Project Type" />
-          <SelectInput name="Location" />
+      {isLoading && (
+        <div className="h-[50vh] my-auto flex flex-col items-center justify-center space-y-4">
+          <div className="animate-bounce">
+            <img src={BuildingIcon} alt="Loading" className="w-16 h-16" />
+          </div>
+          <Heading className="text-center">Loading Data..</Heading>
+          <BodySmall className="text-center">Please wait while we fetch the data</BodySmall>
         </div>
-      </div>
+      )}
 
-      <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 items-stretch justify-normal gap-5">
-        {projects.map((project) => (
-          <ProjectCard
-            key={project.title}
-            project={project}
-            isSelected={byTitle.has(project.title)}
-            onToggle={toggleProject}
-          />
-        ))}
-      </div>
-      <div className="my-5 flex items-center justify-between">
-        <BodySmall>Showing 6 out of 300</BodySmall>
-        <div className="flex items-center justify-normal gap-3">
-          <div className="border border-border-primary rounded-md bg-bg-primary-2 p-1">
-            <ChevronLeft />
+      {error && !isLoading && (
+        <div className="h-[50vh] my-auto flex flex-col items-center justify-center space-y-4">
+          <div className="animate-pulse">
+            <img src={FileCheckIcon} alt="Error" className="w-16 h-16" />
           </div>
-          <BodyBase textColor={`text-sub-heading`}>Page 1 of 20</BodyBase>
-          <div className="border border-border-primary rounded-md bg-bg-primary-2 p-1">
-            <ChevronRight />
-          </div>
+          <Heading className="text-center text-red-600">Error Occurred</Heading>
+          <BodySmall className="text-center text-red-500">{error}</BodySmall>
         </div>
-      </div>
-      <RoundedButton
-        label="Continue"
-        bg="bg-bg-dusky-plum-base my-5"
-        rounded="rounded-md"
-        onClick={() => {
-          // provide selected projects to parent and move forward
-          onContinue?.(selectedProjects);
-        }}
-      />
+      )}
+
+      {!isLoading && !error && (
+        <>
+          {/* Filters */}
+          <div className="flex flex-col sm:flex-row items-center justify-normal gap-12">
+            <BodyBase textColor="text-sub-heading" extraClass="w-full sm:w-[35%]">
+              PROJECTS open for investment
+            </BodyBase>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 w-full sm:w-[65%] items-center justify-normal gap-5">
+              <SelectInput
+                value={company}
+                setValue={setCompany}
+                name="Company"
+                options={data?.companies}
+              />
+              <SelectInput
+                value={type}
+                setValue={setType}
+                name="Project Type"
+                options={data?.asset_types}
+              />
+              <div className="relative border border-border-primary rounded-md">
+                <select
+                  name="location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  className="text-sub-heading w-full appearance-none px-5 py-[15px] rounded-md"
+                >
+                  <option value="" className="capitalize">
+                    Location
+                  </option>
+                  {(data?.locations || []).map((o) => (
+                    <option key={o} value={o}>
+                      {o}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute top-1/2 -translate-y-1/2 transform right-5" />
+              </div>
+            </div>
+          </div>
+
+          {/* Projects grid */}
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 items-stretch justify-normal gap-5">
+            {(data?.projects || []).map((project, index) => (
+              <ProjectCard
+                key={index}
+                project={project}
+                isSelected={byTitle.has(project.name)}
+                onToggle={toggleProject}
+              />
+            ))}
+          </div>
+
+          {/* Pagination (placeholder values for now) */}
+          {data?.pagination && (
+            <div className="my-5 flex items-center justify-between">
+              <BodySmall>Showing 6 out of 300</BodySmall>
+              <div className="flex items-center justify-normal gap-3">
+                <div className="border border-border-primary rounded-md bg-bg-primary-2 p-1">
+                  <ChevronLeft />
+                </div>
+                <BodyBase textColor="text-sub-heading">Page 1 of 20</BodyBase>
+                <div className="border border-border-primary rounded-md bg-bg-primary-2 p-1">
+                  <ChevronRight />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Main continue button */}
+          <RoundedButton
+            label="Continue"
+            bg="bg-bg-dusky-plum-base my-5"
+            rounded="rounded-md"
+            onClick={() => {
+              onContinue?.(selectedProjects);
+            }}
+          />
+        </>
+      )}
+
+      {/* Footer disclaimer */}
       <div className="mt-10 py-5 border-t border-t-border-primary">
         <CaptionExtraSmall>
           Fundrise, LLC (“Fundrise“) operates a website at fundrise.com and certain mobile apps (the
-          “Platform“). By using the Platform, you accept our Terms of Service and Privacy Policy.
+          “Platform“). By using the Platform, you accept our Terms of Service and Privacy Policy.
           All images and return and projection figures shown are for illustrative purposes only, may
           assume additional investments over time, and are not actual Fundrise customer or model
           returns or projections. Past performance is no guarantee of future results. Any historical
@@ -165,18 +230,19 @@ export default function UserInvestStepTwo({ setCurrentPage, onContinue }) {
           <br />
           The publicly filed offering circulars of the issuers sponsored by Rise Companies Corp.,
           not all of which may be currently qualified by the Securities and Exchange Commission, may
-          be found at fundrise.com/oc. For investors and potential investors who are residents of
+          be found at fundrise.com/oc. For investors and potential investors who are residents of
           the State of Washington, please send all correspondence, including any questions or
           comments, to washingtonstate@fundrise.com. <br />
           <br />
           Fundrise takes any potential security issues seriously, and encourages the responsible and
           timely reporting of unknown security issues. Please send any discovered security concerns
-          to  © 2025 Fundrise, LLC. All Rights Reserved. eREIT, eFund and eDirect are trademarks of
-          Rise Companies Corp. Proudly designed and coded in Washington, D.C. <br />
+          to © 2025 Fundrise, LLC. All Rights Reserved. eREIT, eFund and eDirect are trademarks of
+          Rise Companies Corp. Proudly designed and coded in Washington, D.C. <br />
           <br />© 2025 Fundrise, LLC. All Rights Reserved. eREIT, eFund and eDirect are trademarks
-          of Rise Companies Corp. Proudly designed and coded in Washington, D.C.
+          of Rise Companies Corp. Proudly designed and coded in Washington, D.C.
         </CaptionExtraSmall>
       </div>
+
       {/* Right-side floating selection tray */}
       {selectedProjects.length > 0 && (
         <aside className="fixed right-6 top-1/2 -translate-y-1/2 w-auto rounded-2xl border border-border-primary bg-white shadow-xl">
@@ -187,30 +253,8 @@ export default function UserInvestStepTwo({ setCurrentPage, onContinue }) {
             </p>
           </div>
 
-          {/* <div className="max-h-[55vh] overflow-auto divide-y divide-border-primary">
-            {selectedProjects.map((p) => (
-              <div key={p.title} className="px-5 py-4 flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="font-sora text-[15px] font-semibold text-sub-heading truncate">
-                    {p.title}
-                  </p>
-                  <p className="text-sm text-sub-title">{p.developer}</p>
-                  <p className="text-sm text-sub-title">{p.location}</p>
-                </div>
-
-                <button
-                  onClick={() => toggleProject(p)}
-                  className="shrink-0 inline-flex items-center justify-center h-8 w-8 rounded-md border border-btext-1-base text-btext-1-base"
-                  title="Remove"
-                >
-                  <X size={16} />
-                </button>
-              </div>
-            ))}
-          </div> */}
-
+          {/* Bottom continue */}
           <div className="px-5 py-4 border-t border-border-primary flex items-center justify-center">
-            {/* <span className="text-sm text-sub-title">Ready to proceed?</span> */}
             <button
               className="px-4 py-2 rounded-md border border-btext-1-base text-btext-1-base font-display text-sm font-bold"
               onClick={() => onContinue?.(selectedProjects)}

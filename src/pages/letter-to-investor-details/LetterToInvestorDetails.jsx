@@ -1,5 +1,12 @@
 import LetterDetailsHero from './LetterDetailsHero';
 import ContentContainer from './ContentContainer';
+import BuildingIcon from '@/assets/icons/Building_02.svg';
+import FileCheckIcon from '@/assets/icons/FileCheck.svg';
+import { useEffect, useState } from 'react';
+import { getPostDetails } from '@/services/posts';
+import { useParams } from 'react-router-dom';
+import Heading from '@/components/text/Heading';
+import BodySmall from '@/components/text/BodySmall';
 const blogdata = {
   id: 1,
   title: 'How Writing Online Has Helped Avoid Scammers',
@@ -108,10 +115,53 @@ const blogdata = {
 };
 
 function LetterToInvestorDetails() {
+  const { slug } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await getPostDetails(slug);
+        setData(response.result);
+      } catch (err) {
+        setError(err.message || 'Failed to fetch projects');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [slug]);
   return (
     <>
-      <LetterDetailsHero />
-      <ContentContainer contents={blogdata.contents} />
+      {isLoading && (
+        <div className=" h-[50vh] my-auto flex flex-col items-center justify-center space-y-4">
+          <div className="animate-bounce">
+            <img src={BuildingIcon} alt="Loading" className="w-16 h-16" />
+          </div>
+          <Heading className="text-center">Loading Data..</Heading>
+          <BodySmall className="text-center">Please wait while we fetch the data</BodySmall>
+        </div>
+      )}
+      {error && (
+        <div className=" h-[50vh] my-auto  flex flex-col items-center justify-center space-y-4">
+          <div className="animate-pulse">
+            <img src={FileCheckIcon} alt="Error" className="w-16 h-16" />
+          </div>
+          <Heading className="text-center text-red-600">Error Occurred</Heading>
+          <BodySmall className="text-center text-red-500">{error}</BodySmall>
+        </div>
+      )}
+      {!isLoading && !error && (
+        <>
+          <LetterDetailsHero data={data?.post} />
+          <ContentContainer contents={data?.post.contents} />
+        </>
+      )}
     </>
   );
 }

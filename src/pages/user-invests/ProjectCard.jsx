@@ -21,30 +21,30 @@ export default function ProjectCard({ project, isSelected = false, onToggle }) {
   return (
     <div className="p-5 border border-border-primary rounded-xl flex items-stretch justify-normal gap-6">
       <img
-        src={AssureImp}
+        src={project?.thumbnail_image}
         alt="thumbnail image"
         className="w-[30%] rounded-md h-full object-center object-cover"
       />
       <div className="w-[70%] flex flex-col justify-between">
         <div>
           <BodyBase fontWeight="font-bold" textColor="text-sub-heading">
-            {project.title}
+            {project?.name}
           </BodyBase>
           <h6 className="text-lg font-medium text-btext-1-base font-sora mt-0.5">
-            {project.developer}
+            {project.company_name}
           </h6>
 
           <div className="flex items-start justify-normal gap-10 mt-2.5">
             <div>
               <CaptionExtraSmall textColor="text-sub-title">Inspection Date</CaptionExtraSmall>
               <BodySmall textColor="text-sub-title" fontWeight="font-medium">
-                {project.inceptionYear}
+                {project?.inception_date}
               </BodySmall>
             </div>
             <div>
               <CaptionExtraSmall textColor="text-sub-title">Net Asset Value</CaptionExtraSmall>
               <BodySmall textColor="text-sub-title" fontWeight="font-medium">
-                {formatToBMK(project.netAssetValue)}
+                {formatToBMK(project?.net_asset_value)}
               </BodySmall>
             </div>
           </div>
@@ -53,13 +53,13 @@ export default function ProjectCard({ project, isSelected = false, onToggle }) {
             <div>
               <CaptionExtraSmall textColor="text-sub-title">Project Type</CaptionExtraSmall>
               <BodySmall textColor="text-sub-title" fontWeight="font-medium">
-                {project.projectType}
+                {project?.project_type_name}
               </BodySmall>
             </div>
             <div>
               <CaptionExtraSmall textColor="text-sub-title">Location</CaptionExtraSmall>
               <BodySmall textColor="text-sub-title" fontWeight="font-medium">
-                {project.location}
+                {project?.location}
               </BodySmall>
             </div>
           </div>

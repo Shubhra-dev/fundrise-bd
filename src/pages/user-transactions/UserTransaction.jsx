@@ -21,7 +21,7 @@ export default function UserTransaction() {
         setIsLoading(true);
         setError(null);
         const response = await getTransactions();
-        setTransactions(response);
+        setTransactions(response?.result.investments);
       } catch (err) {
         setError(err.message);
       } finally {

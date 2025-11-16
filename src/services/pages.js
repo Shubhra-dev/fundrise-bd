@@ -28,6 +28,12 @@ export async function getHistoricalData() {
 export async function getRealEstateData() {
   return await publicGet(`${BASE_URL}/pages/real-estate`);
 }
+export async function getClientReturnData() {
+  return await publicGet(`${BASE_URL}/pages/client-returns`);
+}
+export async function getAboutUsData() {
+  return await publicGet(`${BASE_URL}/pages/about-us`);
+}
 
 export async function getConsistantGrowth() {
   return await publicGet(`${BASE_URL}/consistent-growth`);
