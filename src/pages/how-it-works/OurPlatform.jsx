@@ -33,7 +33,7 @@ function OurPlatform() {
               textColor={`text-btext-2-dark`}
               font={`font-display`}
             >
-              <a href="">Learn more about your platform</a>
+              <a href="/about-us">Learn more about your platform</a>
             </BodySmall>
             <FiArrowUpRight className="text-btext-2-dark font-bold" />
           </div>

@@ -4,20 +4,8 @@ import { BsStarFill } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 
 function NewsCard({ image, title, starCount, strategy, badge, summary, imageAlt, slug }) {
-  const handleCardClick = (e) => {
-    // If middle click or ctrl/cmd+click, let the browser handle it naturally
-    if (e.button === 1 || (e.button === 0 && (e.ctrlKey || e.metaKey))) {
-      return;
-    }
-    // For normal left clicks, prevent default and use router navigation
-    e.preventDefault();
-    window.location.href = `/letters-to-investor/details/${slug || ''}`;
-  };
-
   return (
-    <Link
-      to={`/letters-to-investor/details/${slug || ''}`}
-      onClick={handleCardClick}
+    <div
       className={`relative flex ${badge === 'Feature Update' ? `bg-bg-primary-2` : badge === 'New Acquisition' ? 'bg-bg-blush-mist-light' : ' border border-border-primary'} w-full items-stretch justify-normal gap-6 rounded-[10px] hover:shadow-lg transition-shadow cursor-pointer`}
     >
       <div className="relative w-[30%] min-h-48 overflow-hidden rounded-l-[10px]">
@@ -47,9 +35,11 @@ function NewsCard({ image, title, starCount, strategy, badge, summary, imageAlt,
               </div>
             </div>
           )}
-          <span className="px-5 py-2 text-sm font-bold bg-white rounded-xl shadow-[inset_0px_-4px_4px_0px_rgba(0,0,0,0.25)] outline outline-1 outline-offset-[-1px] outline-border-secondary font-display">
-            Read More
-          </span>
+          <Link to={`/letters-to-investor/details/${slug}`}>
+            <span className="px-5 py-2 text-sm font-bold bg-white rounded-xl shadow-[inset_0px_-4px_4px_0px_rgba(0,0,0,0.25)] outline outline-1 outline-offset-[-1px] outline-border-secondary font-display">
+              Read More
+            </span>
+          </Link>
         </div>
       </div>
       {starCount > 0 && (
@@ -59,7 +49,7 @@ function NewsCard({ image, title, starCount, strategy, badge, summary, imageAlt,
           <BsStarFill className={`text-white text-xs ${starCount === 3 ? '' : 'invisible'}`} />
         </div>
       )}
-    </Link>
+    </div>
   );
 }
 

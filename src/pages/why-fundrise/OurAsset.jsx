@@ -31,7 +31,7 @@ function OurAsset() {
               textColor={`text-btext-2-dark`}
               font={`font-display`}
             >
-              <a href="">Explore all real estate assets</a>
+              <a href="/real-estate">Explore all real estate assets</a>
             </BodySmall>
             <FiArrowUpRight className="text-btext-2-dark font-bold" />
           </div>

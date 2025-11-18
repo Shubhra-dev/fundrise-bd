@@ -4,6 +4,7 @@ import Title from '../../components/text/Title';
 import SubHeading from '../../components/text/SubHeading';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import BodyBase from '../../components/text/BodyBase';
+import { Link } from 'react-router-dom';
 function ClientReturnHero() {
   return (
     <SectionLayout rounded="rounded-t-[30px]">
@@ -23,10 +24,12 @@ function ClientReturnHero() {
             comprehensive investment strategy.
           </BodyBase>
           <div className="pt-10 flex items-center justify-center sm:justify-normal gap-5 laptop:gap-[30px] w-full">
-            <PrimaryButton
-              label="Sign Up"
-              bg="bg-bg-dusky-plum-base hover:bg-bg-dusky-plum-light hover:text-black"
-            />
+            <Link to={`/auth/register`}>
+              <PrimaryButton
+                label="Sign Up"
+                bg="bg-bg-dusky-plum-base hover:bg-bg-dusky-plum-light hover:text-black"
+              />
+            </Link>
           </div>
         </div>
       </div>

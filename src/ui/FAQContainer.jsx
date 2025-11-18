@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import SectionLayout from './SectionLayout';
 import { IoCaretDownOutline, IoCaretUpOutline, IoWarningOutline } from 'react-icons/io5';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SubHeading from '../components/text/SubHeading';
 import Heading from '../components/text/Heading';
 import PrimaryButton from '../components/buttons/PrimaryButton';
@@ -77,12 +77,9 @@ export default function FAQSection({ title, subTitle, page = 'how_it_works' }) {
               : 'Description: Lorem ipsum dolor sit amet consectetur. Nunc vivamus pellentesque etiam vitae.'}
           </BodyBase>
           <div className={`w-max m-auto sm:m-0`}>
-            <PrimaryButton
-              label="Contact"
-              rightIcon={1}
-              bg="bg-bg-cool-irish-base"
-              onClick={() => navigate('/contact-us')}
-            />
+            <Link to={`/help-center`}>
+              <PrimaryButton label="Contact" rightIcon={1} bg="bg-bg-cool-irish-base" />
+            </Link>
           </div>
         </div>
 

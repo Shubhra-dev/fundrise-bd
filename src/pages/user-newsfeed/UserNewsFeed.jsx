@@ -1,81 +1,44 @@
 import BodyBase from '@/components/text/BodyBase';
 import DashboardLayout from '@/pages/user-dashboard/DashboardLayout';
 import NewsCard from '@/pages/user-dashboard/NewsCard';
-import { BiCaretDown } from 'react-icons/bi';
-import Blog5 from '@assets/Blog5.png';
-import Blog6 from '@assets/Blog6.png';
-import Blog1 from '@assets/Blog1.png';
-import Blog2 from '@assets/Blog2.png';
+import { BiCaretDown, BiErrorCircle } from 'react-icons/bi';
 import CaptionExtraSmall from '@/components/text/CaptionExtraSmall';
-const newsCards = [
-  {
-    name: 'Featured News',
-    item: [
-      {
-        id: 'pu-1',
-        badge: 'Feature Update',
-        title: 'Positive performance continues through first',
-        summary:
-          'Strong fundamentals and continued operating rigor resulted in yet another quarter of positive returns across all three primary asset classes.',
-        strategy: null,
-        starCount: 2,
-        img: Blog5,
-        imageAlt: 'Abstract collage with houses and circular graphic',
-      },
-      {
-        id: 'na-1',
-        badge: 'New Acquisition',
-        title: 'Portfolio update: New preferred equity investment',
-        summary:
-          'New high-yield investment with a 14.00% fixed return in a 290-unit multifamily development in Anna, TX.',
-        strategy: 'Fixed Income',
-        starCount: 1,
-        img: Blog6,
-        imageAlt: 'Neighborhood at sunset with houses and cars',
-      },
-    ],
-  },
-  {
-    name: 'April 2025',
-    item: [
-      {
-        id: 'pu-1',
-        badge: 'Performance Update',
-        title: 'Outperformance amidst market uncertainty',
-        summary:
-          'Strong operating performance resulted in generally positive returns for the first quarter of 2025 across real estate, credit, and venture capital.',
-        strategy: null,
-        starCount: 0,
-        img: Blog1,
-        imageAlt: 'Abstract collage with houses and circular graphic',
-      },
-    ],
-  },
-  {
-    name: 'January 2025',
-    item: [
-      {
-        id: 'pu-2',
-        badge: 'Performance Update',
-        title: 'The case for real estate in 2025',
-        summary:
-          'In our annual letter to investors, we discuss how falling interest rates over the course of the year kicked off what we expect to be an extended period...',
-        strategy: null,
-        starCount: 0,
-        img: Blog2,
-        imageAlt: 'House with chart overlay on blue background',
-      },
-    ],
-  },
+import { useState, useEffect } from 'react';
+import Heading from '@/components/text/Heading';
+import BodySmall from '@/components/text/BodySmall';
+import { getUserNewsfeed } from '@/services/posts';
+
+const monthOptions = [
+  { name: 'January', value: 1 },
+  { name: 'February', value: 2 },
+  { name: 'March', value: 3 },
+  { name: 'April', value: 4 },
+  { name: 'May', value: 5 },
+  { name: 'June', value: 6 },
+  { name: 'July', value: 7 },
+  { name: 'August', value: 8 },
+  { name: 'September', value: 9 },
+  { name: 'October', value: 10 },
+  { name: 'November', value: 11 },
+  { name: 'December', value: 12 },
 ];
 
-function FilterItem({ title }) {
+function FilterItem({ title, value, onChange, options }) {
   return (
     <div className="relative w-full">
-      <select className="px-5 w-full py-[15px] appearance-none border border-border-primary rounded-md">
+      <select
+        className="px-5 w-full py-[15px] appearance-none border border-border-primary rounded-md"
+        value={value}
+        onChange={onChange}
+      >
         <option className="text-sub-heading font-normal text-base" value="">
           {title}
         </option>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.name || option}
+          </option>
+        ))}
       </select>
       <BiCaretDown className="absolute text-black text-xl right-2 top-1/2 transform -translate-y-1/2" />
     </div>
@@ -83,41 +46,135 @@ function FilterItem({ title }) {
 }
 
 function UserNewsFeed() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [data, setData] = useState(null);
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState('');
+
+  useEffect(() => {
+    const fetchNewsfeed = async () => {
+      setIsLoading(true);
+      setIsError(false);
+      try {
+        const response = await getUserNewsfeed({ month, year });
+        if (response.success) {
+          setData(response.result);
+        } else {
+          setIsError(true);
+        }
+      } catch (error) {
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchNewsfeed();
+  }, [month, year]);
+
+  if (isLoading) {
+    return (
+      <DashboardLayout activeTab={5}>
+        <div className="flex justify-center items-center h-full">
+          <Heading>Loading...</Heading>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (isError) {
+    return (
+      <DashboardLayout activeTab={5}>
+        <div className="flex justify-center items-center h-full">
+          <BiErrorCircle className="text-red-500 text-4xl mr-2" />
+          <BodySmall>Something went wrong. Please try again later.</BodySmall>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   return (
     <DashboardLayout activeTab={5}>
       <div className="flex flex-col-reverse sm:flex-row items-start justify-normal gap-10 mt-2">
         <div className="w-full sm:w-2/3 tab:w-3/4">
-          {newsCards.map((card) => (
-            <div key={card.name} className="mb-8">
+          {data?.featured && (
+            <div className="mb-8">
               <BodyBase textColor={`text-sub-heading`} extraClass={`mb-4`}>
-                {card.name}
+                Featured News
               </BodyBase>
               <div className="flex flex-col gap-5">
-                {card.item.map((item) => (
+                {data.featured.map((item) => (
                   <NewsCard
                     key={item.id}
+                    slug={item.slug}
                     title={item.title}
-                    badge={item.badge}
-                    summary={item.summary}
-                    image={item.img}
-                    imageAlt={item.imageAlt}
-                    strategy={item.strategy}
-                    starCount={item.starCount}
+                    badge={item.category_name}
+                    summary={item.excerpt}
+                    image={item.featured_image}
+                    imageAlt={item.title}
+                    strategy={null}
+                    starCount={0}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {data?.groups?.map((group) => (
+            <div key={group.group_title} className="mb-8">
+              <BodyBase textColor={`text-sub-heading`} extraClass={`mb-4`}>
+                {group.group_title}
+              </BodyBase>
+              <div className="flex flex-col gap-5">
+                {group.posts.map((post) => (
+                  <NewsCard
+                    key={post.id}
+                    title={post.title}
+                    slug={post.slug}
+                    badge={post.category_name}
+                    summary={post.excerpt}
+                    image={post.featured_image}
+                    imageAlt={post.title}
+                    strategy={null}
+                    starCount={0}
                   />
                 ))}
               </div>
             </div>
           ))}
         </div>
+
         <div className="w-full sm:w-1/3 tab:w-1/4 pr-4">
           <div className="mt-2.5 flex flex-col gap-[15px]">
             <BodyBase textColor={`text-sub-heading`}>Filter by:</BodyBase>
-            <FilterItem title={'Recent Activity'} />
-            <FilterItem title={'Select Month'} />
-            <FilterItem title={'Select Year'} />
+            <FilterItem
+              title={'Select Month'}
+              value={month}
+              onChange={(e) => setMonth(e.target.value)}
+              options={monthOptions}
+            />
+            <FilterItem
+              title={'Select Year'}
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+              options={[
+                { name: '2024', value: 2024 },
+                { name: '2025', value: 2025 },
+              ]}
+            />
           </div>
         </div>
       </div>
+
+      {data?.pagination && (
+        <div className="mt-10 py-5 border-t border-t-border-primary flex justify-center">
+          <BodySmall>
+            Page {data.pagination.current_page} of {data.pagination.last_page}
+          </BodySmall>
+        </div>
+      )}
+
       <div className="mt-10 py-5 border-t border-t-border-primary">
         <CaptionExtraSmall>
           Fundrise, LLC (“Fundrise“) operates a website at fundrise.com and certain mobile apps (the

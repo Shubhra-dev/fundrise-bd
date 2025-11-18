@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import BodyBase from '../../components/text/BodyBase';
 import Title from '../../components/text/Title';
@@ -25,11 +26,13 @@ function YourReturns() {
             integrated platform designed to deliver better net performance potential.
           </BodyBase>
           <div className="pt-10 flex items-center justify-normal gap-5 laptop:gap-[30px] w-full">
-            <PrimaryButton
-              label="Learn about our technology"
-              rightIcon={true}
-              bg="bg-bg-dusky-plum-base hover:bg-bg-cool-irish-light hover:text-black"
-            />
+            <Link to={`/why-fundrise`}>
+              <PrimaryButton
+                label="Learn about our technology"
+                rightIcon={true}
+                bg="bg-bg-dusky-plum-base hover:bg-bg-cool-irish-light hover:text-black"
+              />
+            </Link>
           </div>
         </div>
         <div className="w-full sm:w-[45%] tab:w-1/2 flex flex-col gap-9">

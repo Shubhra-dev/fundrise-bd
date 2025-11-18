@@ -11,7 +11,8 @@ function WaysToInterest() {
             heading={true}
             title={`Personal investment account`}
             borderColor="border-border-primary"
-            link={`Open your account`}
+            linkText={`Open your account`}
+            link={`/auth/register`}
             bg="bg-gradient-to-r from-bg-soft-orchid-base to-bg-blush-mist-base"
             text={`Open a standard account and build a portfolio of alternative investments.`}
           />
@@ -19,7 +20,8 @@ function WaysToInterest() {
             heading={true}
             title={`Tax-advantaged investing`}
             borderColor="border-border-primary"
-            link={`Invest in your retirement`}
+            linkText={`Invest in your retirement`}
+            link={`/user/dashboard`}
             bg="bg-gradient-to-r from-bg-soft-orchid-base to-bg-blush-mist-base"
             text={`Roll over an existing retirement account or open a new Traditional or Roth IRA.`}
           />
@@ -27,7 +29,8 @@ function WaysToInterest() {
             heading={true}
             title={`Through your advisor`}
             borderColor="border-border-primary"
-            link={`Learn More`}
+            linkText={`Learn More`}
+            link={`/about-us`}
             bg="bg-gradient-to-r from-bg-soft-orchid-base to-bg-blush-mist-base"
             text={`Work with an RIA? We can give them access to invest on your behalf.`}
           />

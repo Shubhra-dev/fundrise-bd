@@ -11,6 +11,7 @@ function TextBoxWhyFundrise({
   bg = 'bg-bg-soft-orchid-base',
   borderColor = `border-[#F6CDCE]`,
   link,
+  linkText,
 }) {
   return (
     <div
@@ -33,7 +34,7 @@ function TextBoxWhyFundrise({
       {link && (
         <div className="cursor-pointer flex items-center justify-normal gap-2 mt-7">
           <BodySmall fontWeight={`font-bold`} textColor={`text-btext-2-dark`} font={`font-display`}>
-            <a href="">{link}</a>
+            <a href={link}>{linkText}</a>
           </BodySmall>
           <FiArrowUpRight className="text-btext-2-dark font-bold text-sm" />
         </div>

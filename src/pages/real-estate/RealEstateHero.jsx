@@ -4,6 +4,7 @@ import Title from '../../components/text/Title';
 import SubHeading from '../../components/text/SubHeading';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import BodyBase from '../../components/text/BodyBase';
+import { Link } from 'react-router-dom';
 function RealEstateHero() {
   return (
     <SectionLayout
@@ -34,10 +35,12 @@ function RealEstateHero() {
             of the U.S. real estate market and position our clients for long-term growth.
           </BodyBase>
           <div className="pt-10 flex items-center justify-center sm:justify-normal gap-5 laptop:gap-[30px] w-full">
-            <PrimaryButton
-              label="Sign Up"
-              bg="bg-bg-cool-irish-base hover:bg-bg-cool-irish-light hover:text-black"
-            />
+            <Link to={`/auth/register`}>
+              <PrimaryButton
+                label="Sign Up"
+                bg="bg-bg-cool-irish-base hover:bg-bg-cool-irish-light hover:text-black"
+              />
+            </Link>
           </div>
         </div>
       </div>

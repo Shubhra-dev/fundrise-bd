@@ -7,6 +7,7 @@ import Grid1 from '../../assets/Grid1.jpg';
 import Grid2 from '../../assets/Grid2.jpg';
 import Grid3 from '../../assets/Grid3.jpg';
 import Grid4 from '../../assets/Grid4.jpg';
+import { Link } from 'react-router-dom';
 
 function OurAssets() {
   return (
@@ -40,11 +41,13 @@ function OurAssets() {
             more than $1 billion annually in both 2021 and 2022.
           </BodyBase>
           <div className="pt-10 flex items-center justify-center sm:justify-normal gap-5 laptop:gap-[30px] w-full">
-            <PrimaryButton
-              label="View all offerings"
-              rightIcon={true}
-              bg="bg-bg-cool-irish-base hover:bg-bg-cool-irish-light hover:text-black"
-            />
+            <Link to={`/real-estate`}>
+              <PrimaryButton
+                label="View all offerings"
+                rightIcon={true}
+                bg="bg-bg-cool-irish-base hover:bg-bg-cool-irish-light hover:text-black"
+              />
+            </Link>
           </div>
         </div>
         <div className="rounded-md w-full tab:w-[40%] bgLap:w-[45%] flex items-start justify-normal gap-[15px]">

@@ -4,6 +4,7 @@ import SubTitle from '../../components/text/SubTitle';
 import PrimaryButton from '../../components/buttons/PrimaryButton';
 import SubHeading from '../../components/text/SubHeading';
 import Image2 from '../../assets/Image2.jpg';
+import { Link } from 'react-router-dom';
 
 function BetterPortfolio() {
   return (
@@ -45,7 +46,9 @@ function BetterPortfolio() {
             </div>
           </div>
           <div className="mt-9">
-            <PrimaryButton rightIcon={1} label="Start Investing" />
+            <Link to={`/user/dashboard`}>
+              <PrimaryButton rightIcon={1} label="Start Investing" />
+            </Link>
           </div>
         </div>
         <div className="chamfer-tr-5 rounded-md bg-border-alternative-1 p-1 hidden tab:block">

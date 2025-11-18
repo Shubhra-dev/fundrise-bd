@@ -1,5 +1,5 @@
 import { BASE_URL } from '@/services/BASE_URL';
-import { publicGet } from '@/utils/http';
+import { publicGet, secureGet } from '@/utils/http';
 
 export async function getPosts({
   searchValue = '',
@@ -19,6 +19,27 @@ export async function getPosts({
   });
 
   return await publicGet(`${BASE_URL}/posts?${params.toString()}`);
+}
+export async function getUserNewsfeed({
+  searchValue = '',
+  perPage = 5,
+  page = '',
+  orderColumn = '',
+  orderType = '',
+  month = '',
+  year = '',
+} = {}) {
+  const params = new URLSearchParams({
+    search_value: searchValue,
+    per_page: perPage,
+    page: page,
+    order_column: orderColumn,
+    order_type: orderType,
+    month: month,
+    year: year,
+  });
+
+  return await secureGet(`${BASE_URL}/investor-panel/newsfeed/posts?${params.toString()}`);
 }
 export async function getPostDetails(slug) {
   return await publicGet(`${BASE_URL}/posts/${slug}`);
