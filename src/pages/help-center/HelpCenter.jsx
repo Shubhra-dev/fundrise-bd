@@ -4,6 +4,7 @@ import SectionLayout from '../../ui/SectionLayout';
 import HelpCenterHero from './HelpCenterHero';
 import BodyBase from '@/components/text/BodyBase';
 import { getHelpCenterPosts } from '@/services/pages';
+import ContactForm from '@/pages/help-center/ContactForm';
 export const helpCenterArticles = [
   {
     title: 'About Fundrise',
@@ -83,6 +84,7 @@ function HelpCenter() {
         {isLoading && <BodyBase>Loading posts....</BodyBase>}
         {isError && <BodyBase>Something went wrong!</BodyBase>}
       </SectionLayout>
+      <ContactForm />
     </>
   );
 }

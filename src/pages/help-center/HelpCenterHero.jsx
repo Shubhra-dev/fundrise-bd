@@ -2,7 +2,16 @@ import SectionLayout from '../../ui/SectionLayout';
 import HelpCenter from '../../assets/HelpCenter.jpg';
 import Title from '../../components/text/Title';
 import { FaSearch } from 'react-icons/fa';
+import RoundedButton from '@/components/buttons/RoundedButton';
+
 function HelpCenterHero({ search, setSearch }) {
+  const handleClick = (event) => {
+    event.preventDefault();
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+      contactForm.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   return (
     <SectionLayout>
       <div className="flex items-center justify-normal sm:gap-[106px]">
@@ -19,6 +28,13 @@ function HelpCenterHero({ search, setSearch }) {
             />
             <FaSearch className="absolute top-[35%] right-3 text-xl" />
           </div>
+          <RoundedButton
+            label="Have Questions?"
+            rounded="rounded-md"
+            width="w-full mt-4"
+            bg="bg-bg-dusky-plum-base"
+            onClick={handleClick}
+          />
         </div>
         <div className="hidden sm:block w-1/2 tab:w-[45%] relative">
           <img
