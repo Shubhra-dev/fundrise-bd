@@ -19,7 +19,7 @@ export default function RoundedButton({
     <button
       type={type}
       onClick={onClick ? onClick : () => {}}
-      className={`${border} ${width} ${padding} group ${bg} ${hoverBg} ${rounded} inline-flex justify-center items-center gap-1.5`}
+      className={`${border} ${width} ${padding} group ${bg} ${hoverBg} ${rounded} inline-flex justify-center items-center gap-1.5 transition-transform duration-300 hover:translate-x-2`}
     >
       <span className={`font-display ${textColor} ${textSize} font-bold`}>{label}</span>
       {rightIcon && <FiArrowUpRight className={`h-5 w-5 ${textColor}`} />}

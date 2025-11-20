@@ -11,7 +11,7 @@ function LinkHolder({ text, link }) {
       onMouseEnter={() => setIsActive(true)}
       onMouseLeave={() => setIsActive(false)}
       className={`flex cursor-pointer items-center justify-normal gap-1.5 transition-transform duration-200 ${
-        isActive ? 'scale-95' : 'scale-100'
+        isActive ? 'translate-x-2' : 'translate-x-0'
       }`}
     >
       <IoChevronForward className="text-base" />

@@ -1,5 +1,5 @@
 import { BASE_URL } from '@/services/BASE_URL';
-import { secureGet, securePost } from '@/utils/http';
+import { publicPost, secureGet, securePost } from '@/utils/http';
 
 export async function getDashboardData() {
   return await secureGet(`${BASE_URL}/investor-panel/dashboard/index`);
@@ -9,4 +9,7 @@ export async function getDashboardNewsfeedData() {
 }
 export async function postSupportData(data) {
   return await securePost(`${BASE_URL}/investor-panel/contact-forms/store`, data);
+}
+export async function postHelpCenterData(data) {
+  return await publicPost(`${BASE_URL}/contact-form-submit`, data);
 }

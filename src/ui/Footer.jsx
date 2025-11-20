@@ -34,10 +34,10 @@ function Footer() {
                 faucibus odio.
               </CaptionSmall>
               <div className="flex items-center justify-normal gap-2.5">
-                <IconBoxBordered image={Facebook} />
-                <IconBoxBordered image={Instagram} />
-                <IconBoxBordered image={LinkedIn} />
-                <IconBoxBordered image={Twitter} />
+                <IconBoxBordered image={Facebook} link="https://www.facebook.com" />
+                <IconBoxBordered image={Instagram} link="https://www.instagram.com" />
+                <IconBoxBordered image={LinkedIn} link="https://www.linkedin.com" />
+                <IconBoxBordered image={Twitter} link="https://www.twitter.com" />
               </div>
             </div>
             <div className="tab:hidden">

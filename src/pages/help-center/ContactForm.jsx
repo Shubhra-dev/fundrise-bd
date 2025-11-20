@@ -2,14 +2,16 @@ import PrimaryButton from '@/components/buttons/PrimaryButton';
 import BodyBase from '@/components/text/BodyBase';
 import BodySmall from '@/components/text/BodySmall';
 import SubHeading from '@/components/text/SubHeading';
+import { postHelpCenterData } from '@/services/dashboard';
 import SectionLayout from '@/ui/SectionLayout';
 import { useState } from 'react';
 
 function ContactForm() {
   const [userData, setUserData] = useState({
+    email: '',
     type: '',
     phone_number: '',
-    message: '',
+    message: 'Hello! I am willing to know more about ...',
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState({ state: false, msg: '' });
@@ -19,12 +21,14 @@ function ContactForm() {
     setIsLoading(true);
     setIsError({ state: false, msg: '' });
     try {
-      const result = await postSupportData(userData);
+      const result = await postHelpCenterData(userData);
       if (result.success) {
         setUserData({
+          name: '',
+          email: '',
           type: '',
           phone_number: '',
-          message: '',
+          message: 'Hello! I am willing to know more about ...',
         });
         setIsSucceeded({
           state: true,
@@ -52,6 +56,40 @@ function ContactForm() {
         className="mt-5 w-full tab:w-3/4 m-auto p-4 rounded-md bg-backgroundCream dark:bg-backgroundCreamDark"
       >
         <div className="w-full">
+          <label htmlFor="name">
+            <BodySmall fontWeight={`font-medium`} extraClass={`pl-2`}>
+              Your Name
+            </BodySmall>
+          </label>
+          <input
+            id="name"
+            type="text"
+            name="name"
+            required
+            value={userData.name}
+            onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+            placeholder="Your Name"
+            className="py-3 px-3 text-sm w-full rounded-md dark:bg-backgroundDark dark:text-textSubheadingDark border border-borderPrimary mt-1"
+          />
+        </div>
+        <div className="w-full my-4">
+          <label htmlFor="email">
+            <BodySmall fontWeight={`font-medium`} extraClass={`pl-2`}>
+              Your Email
+            </BodySmall>
+          </label>
+          <input
+            id="email"
+            type="email"
+            name="phone"
+            required
+            value={userData.email}
+            onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+            placeholder="abc@example.com"
+            className="py-3 px-3 text-sm w-full rounded-md dark:bg-backgroundDark dark:text-textSubheadingDark border border-borderPrimary mt-1"
+          />
+        </div>
+        <div className="w-full my-4">
           <label htmlFor="phone">
             <BodySmall fontWeight={`font-medium`} extraClass={`pl-2`}>
               Phone Number
@@ -60,7 +98,7 @@ function ContactForm() {
           <input
             id="phone"
             type="text"
-            name="phone"
+            name="phone number"
             required
             value={userData.phone_number}
             onChange={(e) => setUserData({ ...userData, phone_number: e.target.value })}
@@ -77,7 +115,6 @@ function ContactForm() {
           <select
             value={userData.type}
             required
-            defaultValue={''}
             onChange={(e) => setUserData({ ...userData, type: e.target.value })}
             id="type"
             className="py-3 px-3 text-sm w-full rounded-md dark:bg-backgroundDark dark:text-textSubheadingDark border border-borderPrimary mt-1"
