@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { IoClose, IoLinkSharp } from 'react-icons/io5';
 import { LuCircleChevronRight } from 'react-icons/lu';
 
@@ -38,7 +38,6 @@ function UserDashboard() {
       const response = await getDashboardData();
       setDashboardData(response?.result ?? null);
     } catch (err) {
-      console.error('Failed to load dashboard:', err);
       setError(err?.message || 'Failed to load dashboard data. Please try again.');
     } finally {
       setIsLoading(false);
@@ -122,11 +121,19 @@ function UserDashboard() {
     );
   }
 
-  const inviteUrl = `https://fundrise.com/r?i=${dashboardData.refer_code}`;
-  const inviteUrlWithoutProtocol = inviteUrl.replace(/^https?:\/\//, '');
-  const portfolioItems = Array.isArray(dashboardData.portfolio_overview)
-    ? dashboardData.portfolio_overview
-    : [];
+  const inviteUrl = useMemo(
+    () => `https://fundrise.com/r?i=${dashboardData.refer_code}`,
+    [dashboardData.refer_code]
+  );
+
+  const inviteUrlWithoutProtocol = useMemo(
+    () => inviteUrl.replace(/^https?:\/\//, ''),
+    [inviteUrl]
+  );
+  const portfolioItems = useMemo(
+    () => (Array.isArray(dashboardData.portfolio_overview) ? dashboardData.portfolio_overview : []),
+    [dashboardData.portfolio_overview]
+  );
 
   return (
     <DashboardLayout activeTab={1}>
