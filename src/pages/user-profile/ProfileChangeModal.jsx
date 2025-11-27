@@ -1,10 +1,10 @@
-// import { useEffect, useRef, useState } from 'react';
-import SubHeading from '././components/text/SubHeading';
-import BodyBase from '././components/text/BodyBase';
 import { useDispatch } from 'react-redux';
 import { BiCheck } from 'react-icons/bi';
 import { updateProfile, uploadProfileImage } from '@/services/profile';
 import { profileImageChange } from '@/features/authentication/authSlice';
+import SubHeading from '@/components/text/SubHeading';
+import BodyBase from '@/components/text/BodyBase';
+import { useEffect, useRef, useState } from 'react';
 
 function ProfileChangeModal({ setShowProfileChange, user, userData, setUserData }) {
   const middleRef = useRef(null);

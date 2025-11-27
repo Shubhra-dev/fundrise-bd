@@ -4,6 +4,9 @@ import BodySmall from '../../components/text/BodySmall';
 import Building from '../../assets/icons/BuildingBlack.svg';
 import RoundedButton from '../../components/buttons/RoundedButton';
 import CaptionExtraSmall from '../../components/text/CaptionExtraSmall';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 function AmountButton({ amount, onClick }) {
   return (
     <button
@@ -15,6 +18,9 @@ function AmountButton({ amount, onClick }) {
   );
 }
 function UserInvestStepOne({ amount, setAmount, setCurrentPage }) {
+  const cart = useSelector((state) => state.cart.items);
+  const hasItemsInCart = cart.length > 0;
+
   return (
     <>
       <div className="w-full flex flex-col tab:flex-row items-start justify-normal gap-8">
@@ -32,31 +38,49 @@ function UserInvestStepOne({ amount, setAmount, setCurrentPage }) {
               />
               <DollarSign className="absolute top-[23%] left-2" />
             </div>
+            {amount < 500 && (
+              <BodySmall textColor="text-red-500" extraClass="mt-2">
+                Amount must be at least $500 to proceed.
+              </BodySmall>
+            )}
             <div className="mt-[18px] flex items-center justify-normal gap-3">
               <AmountButton amount={`$500`} onClick={() => setAmount(`500`)} />
               <AmountButton amount={`$1000`} onClick={() => setAmount(`1000`)} />
               <AmountButton amount={`$1500`} onClick={() => setAmount(`1500`)} />
               <AmountButton amount={`$2000`} onClick={() => setAmount(`2000`)} />
             </div>
-            <div className="mt-9">
+            <div className="mt-9 space-y-4">
               <RoundedButton
                 onClick={() => setCurrentPage(2)}
-                bg="bg-btext-3-dark"
-                label="Continue"
+                bg={`bg-btext-3-dark ${amount < 500 ? 'cursor-not-allowed' : ''}`}
+                disabled={amount < 500}
+                label={hasItemsInCart ? 'Check Other Projects' : 'Continue'}
                 rounded="rounded-md"
               />
+              {hasItemsInCart && (
+                <RoundedButton
+                  onClick={() => setCurrentPage(3)}
+                  hoverBg="hover:bg-btext-3-dark"
+                  bg={`bg-btext-2-dark ${amount < 500 ? 'cursor-not-allowed' : ''}`}
+                  disabled={amount < 500}
+                  label="Proceed to Checkout"
+                  rounded="rounded-md"
+                />
+              )}
             </div>
           </div>
           <div className="border border-border-primary rounded-xl p-5 mt-5">
             <BodyBase textColor={`text-sub-heading`}>Other actions</BodyBase>
             <div className="mt-9">
-              <RoundedButton
-                bg="bg-bg-dusky-plum-light"
-                textColor="text-btext-1-base group-hover:text-white"
-                hoverBg="hover:bg-bg-dusky-plum-base"
-                label="Calculate my growth"
-                rounded="rounded-md"
-              />
+              <Link to="/user/calculator">
+                <RoundedButton
+                  bg="bg-bg-dusky-plum-light"
+                  textColor="text-btext-1-base group-hover:text-white"
+                  hoverBg="hover:bg-bg-dusky-plum-base"
+                  label="Calculate my growth"
+                  rounded="rounded-md"
+                />
+              </Link>
             </div>
           </div>
         </div>

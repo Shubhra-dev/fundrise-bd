@@ -11,19 +11,21 @@ import { PiChartLineBold } from 'react-icons/pi';
 import { RiArrowLeftRightFill } from 'react-icons/ri';
 import { CgFeed } from 'react-icons/cg';
 import { IoHelpBuoyOutline } from 'react-icons/io5';
-import { HiOutlineClipboardDocument } from 'react-icons/hi2';
 import { HiOutlineChartBar } from 'react-icons/hi';
 import { LuUserCheck } from 'react-icons/lu';
 import { MdOutlineSettings } from 'react-icons/md';
 import SubHeading from '../../components/text/SubHeading';
 import { FaRegBell } from 'react-icons/fa';
 import MenuAlt from '../../assets/icons/MenuAlt.svg';
-import Profile from '../../assets/Profile.jpg';
 import { Toaster } from 'react-hot-toast';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { unreadNotificationStatus } from '@/services/notification';
+import Notification from '@/pages/user-dashboard/Notification';
+import { logOut } from '@/features/authentication/authSlice';
 
 function DashboardLayout({ activeTab = 1, children }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.auth);
 
   // Mobile/off-canvas state
@@ -34,6 +36,43 @@ function DashboardLayout({ activeTab = 1, children }) {
   const openMobile = useCallback(() => setMobileOpen(true), []);
   const closeMobile = useCallback(() => setMobileOpen(false), []);
   const toggleMobile = useCallback(() => setMobileOpen((v) => !v), []);
+  const [notificationIsOpen, setNotificationIsOpen] = useState(false);
+  const [hasUnreadNotification, setHasUnreadNotification] = useState({
+    flag: false,
+    count: 0,
+  });
+  // 🔔 Optimized notification polling
+  useEffect(() => {
+    let isMounted = true;
+
+    async function fetchNotifications() {
+      if (!isMounted) return;
+      if (notificationIsOpen) return;
+
+      try {
+        const data = await unreadNotificationStatus();
+        if (data.success) {
+          setHasUnreadNotification({
+            flag: data.result.is_new_notification,
+            count: data.result.total_unread_notifications,
+          });
+        }
+      } catch (error) {
+        console.error('Failed to fetch unread notifications:', error);
+      }
+    }
+
+    // check on mount
+    fetchNotifications();
+
+    // poll in every 30 seconds
+    const intervalId = setInterval(fetchNotifications, 30000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, [notificationIsOpen]);
 
   // Close on ESC for accessibility
   useEffect(() => {
@@ -106,7 +145,7 @@ function DashboardLayout({ activeTab = 1, children }) {
       </div>
 
       <div className="mt-10">
-        <CaptionSmall extraClass={`uppercase px-7 py-2.5`}>Menu</CaptionSmall>
+        <CaptionSmall extraClass={`uppercase px-7 py-2.5`}>More</CaptionSmall>
         <div className="mt-1.5" onClick={handleMenuClick}>
           <MenuItem link={`/user/newsfeed`} name={`Newsfeed`} active={activeTab === 5}>
             <CgFeed
@@ -144,7 +183,7 @@ function DashboardLayout({ activeTab = 1, children }) {
               className={`${activeTab === 11 ? 'text-btext-2-dark' : 'text-paragraph'} text-xl`}
             />
           </MenuItem>
-          <MenuItem name={`Log Out`}>
+          <MenuItem name={`Log Out`} onClick={() => dispatch(logOut())}>
             <BiLogOut className={`group-hover:text-btext-2-dark text-paragraph text-xl`} />
           </MenuItem>
         </div>
@@ -154,6 +193,8 @@ function DashboardLayout({ activeTab = 1, children }) {
 
   return (
     <div className="relative w-full bg-white bg-cover bg-center bg-no-repeat">
+      {notificationIsOpen && <Notification setNotificationIsOpen={setNotificationIsOpen} />}
+
       <div className="max-w-screen-dashboard m-auto min-h-screen flex lg:items-start">
         {/* Desktop sidebar (lg and up): unchanged look */}
         <aside
@@ -207,14 +248,24 @@ function DashboardLayout({ activeTab = 1, children }) {
             </div>
             <div className="flex items-center justify-normal gap-3 sm:gap-8">
               <button
-                onClick={() => navigate(`/user/invest`)}
+                onClick={() => navigate(`/user/invests`)}
                 className="py-2.5 sm:py-4 px-4 sm:px-6 bg-bg-soft-orchid-dark text-sm font-bold text-white font-display rounded-xl"
               >
                 Add Fund +
               </button>
 
-              <div className="flex items-center justify-normal gap-2.5">
-                <FaRegBell className="text-2xl sm:text-3xl m-2 sm:m-4" />
+              <div className="flex items-center justify-normal gap-2.5 relative">
+                <FaRegBell
+                  className="text-2xl sm:text-3xl m-2 sm:m-4 cursor-pointer"
+                  onClick={() => setNotificationIsOpen(true)}
+                />
+                {hasUnreadNotification.flag && (
+                  <div className="absolute top-0 right-0 bg-red-500 rounded-full w-4 h-4 flex items-center justify-center">
+                    <h6 className="font-semibold font-poppins text-[10px] text-white">
+                      {hasUnreadNotification.count}
+                    </h6>
+                  </div>
+                )}
 
                 {/* Profile block hidden below md to save space */}
                 <div className="items-center justify-normal gap-3 hidden tab:flex">
@@ -225,9 +276,6 @@ function DashboardLayout({ activeTab = 1, children }) {
                   />
                   <div className="hidden tab:block">
                     <BodyBase fontWeight={`font-semibold`}>{user.userName}</BodyBase>
-                    {/* <CaptionSmall title={'shariarpranto@gmail.com'}>
-                      {shortEmail(`shariarpranto@gmail.com`)}
-                    </CaptionSmall> */}
                   </div>
                 </div>
 

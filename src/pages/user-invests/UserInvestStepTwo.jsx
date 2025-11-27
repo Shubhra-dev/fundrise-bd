@@ -9,6 +9,8 @@ import BuildingIcon from '@/assets/icons/Building_02.svg';
 import FileCheckIcon from '@/assets/icons/FileCheck.svg';
 import Heading from '@/components/text/Heading';
 import { getInvestProjects } from '@/services/investment';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, removeFromCart, rehydrateCart } from '@/features/cart/cartSlice';
 
 function SelectInput({ name, options, value, setValue }) {
   return (
@@ -47,7 +49,7 @@ export default function UserInvestStepTwo({ setCurrentPage, onContinue, setSelec
     locations: [],
     pagination: null,
   });
-  console.log(location, type, company);
+  // console.log(location, type, company);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -88,13 +90,23 @@ export default function UserInvestStepTwo({ setCurrentPage, onContinue, setSelec
     fetchData();
   }, [company, type, location]);
 
-  const byTitle = useMemo(() => new Set(selected), [selected]);
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
+
+  useEffect(() => {
+    dispatch(rehydrateCart());
+  }, [dispatch]);
 
   const toggleProject = (p) => {
-    setSelected((prev) =>
-      prev.includes(p.name) ? prev.filter((t) => t !== p.name) : [...prev, p.name]
-    );
+    const exists = cartItems.find((item) => item.id === p.id);
+    if (exists) {
+      dispatch(removeFromCart(p.id));
+    } else {
+      dispatch(addToCart(p));
+    }
   };
+
+  const byTitle = useMemo(() => new Set(cartItems.map((item) => item.name)), [cartItems]);
 
   const selectedProjects = useMemo(() => {
     const projects = data?.projects || [];

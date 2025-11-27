@@ -1,5 +1,6 @@
 import BgAlternativeOutlineBox from '@/components/box/BgAlternativeOutlineBox';
 import RoundedButton from '@/components/buttons/RoundedButton';
+import BodySmall from '@/components/text/BodySmall';
 import CaptionExtraSmall from '@/components/text/CaptionExtraSmall';
 import CaptionSmall from '@/components/text/CaptionSmall';
 import SubTitle from '@/components/text/SubTitle';
@@ -13,8 +14,60 @@ import Updates from '@/pages/product-details/Updates';
 import DashboardLayout from '@/pages/user-dashboard/DashboardLayout';
 import InvestmentDetailsHero from '@/pages/user-invests-details/InvestmentDetailsHero';
 import TextBoxItem from '@/pages/user-invests-details/TextBoxItem';
+import BuildingIcon from '@/assets/icons/Building_02.svg';
+import FileCheckIcon from '@/assets/icons/FileCheck.svg';
+import { getProjectDetails } from '@/services/pages';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 function InvestmentDetails() {
+  const { slug } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchProjectDetails = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await getProjectDetails(slug);
+        setData(response.result.project);
+      } catch (err) {
+        setError(err.message || 'Failed to fetch project details');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProjectDetails();
+  }, [slug]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center space-y-4">
+        <div className="animate-bounce">
+          <img src={BuildingIcon} alt="Loading" className="w-16 h-16" />
+        </div>
+        <SubTitle className="text-center">Loading Project Details</SubTitle>
+        <BodySmall className="text-center">
+          Please wait while we fetch the project information
+        </BodySmall>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center space-y-4">
+        <div className="animate-pulse">
+          <img src={FileCheckIcon} alt="Error" className="w-16 h-16" />
+        </div>
+        <SubTitle className="text-center text-red-600">Error Occurred</SubTitle>
+        <BodySmall className="text-center text-red-500">{error}</BodySmall>
+      </div>
+    );
+  }
   return (
     <DashboardLayout activeTab={9}>
       {/* <div className="flex items-start justify-normal gap-10">
@@ -71,13 +124,12 @@ function InvestmentDetails() {
           </div>
         </div>
       </div> */}
-      <InvestmentDetailsHero />
-      <Overview />
-      <Updates />
-      <Location />
-      <AssetType />
-      <OurStrategy />
-      <AccociateFund />
+      <InvestmentDetailsHero projectData={data} />
+      <Overview projectData={data} />
+      <Updates projectData={data?.updates} />
+      <Location projectData={data} />
+      <AssetType projectData={data?.asset_type} />
+      <OurStrategy projectData={data?.strategy} />
     </DashboardLayout>
   );
 }

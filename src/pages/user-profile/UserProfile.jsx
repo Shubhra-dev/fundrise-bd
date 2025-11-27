@@ -1,20 +1,21 @@
-// import { useEffect, useState, useCallback, useMemo } from 'react';
-import DashboardLayout from './user-dashboard/DashboardLayout';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import ProfileShowModule from './ProfileShowModule';
-import SubTitle from '././components/text/SubTitle';
-import Heading from '././components/text/Heading';
-import BodyBase from '././components/text/BodyBase';
-import CaptionSmall from '././components/text/CaptionSmall';
 import { MdOutlineVerified } from 'react-icons/md';
 import { GoDotFill } from 'react-icons/go';
 import { IoMdFemale, IoMdMale } from 'react-icons/io';
-import PrimaryButton from '././components/buttons/PrimaryButton';
-import RoundedButton from '././components/buttons/RoundedButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { PiPencilSimple } from 'react-icons/pi';
 import ProfileChangeModal from './ProfileChangeModal';
 import { getProfileData, updateProfile } from '@/services/profile';
 import { userNameChange } from '@/features/authentication/authSlice';
+import DashboardLayout from '@/pages/user-dashboard/DashboardLayout';
+import Heading from '@/components/text/Heading';
+import BodyBase from '@/components/text/BodyBase';
+import CaptionSmall from '@/components/text/CaptionSmall';
+import SubTitle from '@/components/text/SubTitle';
+import PrimaryButton from '@/components/buttons/PrimaryButton';
+import RoundedButton from '@/components/buttons/RoundedButton';
+import CaptionExtraSmall from '@/components/text/CaptionExtraSmall';
 
 function UserProfile() {
   const dispatch = useDispatch();
@@ -63,9 +64,9 @@ function UserProfile() {
 
         const data = await updateProfile(profileData);
         if (data.success) {
-          if (profileData.first_name) {
-            dispatch(userNameChange(profileData.first_name));
-          }
+          dispatch(
+            userNameChange(`${data?.result.investor.first_name} ${data?.result.investor.last_name}`)
+          );
 
           setIsEditSuccess({
             state: true,
@@ -74,6 +75,7 @@ function UserProfile() {
 
           setTimeout(() => {
             setIsEditSuccess({ state: false, msg: '' });
+            setProfileData(data?.result.investor);
             setEditModuleOpen(false);
           }, 3000);
         } else {
@@ -115,10 +117,28 @@ function UserProfile() {
 
       <div className="mt-20 sm:mt-5 rounded-md bg-gray-50 dark:bg-backgroundTertiary sm:px-5 py-2.5 min-h-screen">
         {isError.state && (
-          <div className="p-4">
-            <Heading align="text-center" textColor="text-danger">
+          <div className="flex flex-col items-center justify-center h-[80vh] text-center">
+            <div className="text-red-500 mb-2">
+              <svg
+                className="w-12 h-12 mx-auto"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
+              </svg>
+            </div>
+            <BodySmall textColor="text-red-500" fontWeight="font-bold">
               {isError.msg}
-            </Heading>
+            </BodySmall>
+            <CaptionExtraSmall extraClass="mt-2">
+              Please try again later or contact support if the problem persists.
+            </CaptionExtraSmall>
           </div>
         )}
 
@@ -171,16 +191,16 @@ function UserProfile() {
                 <SubTitle font="font-clash">
                   {profileData.first_name} {profileData.last_name}
                 </SubTitle>
-                {profileData.gender === 'male' && (
+                {profileData.gender === 'Male' && (
                   <IoMdMale
                     className="font-bold font-clash text-3xl text-btext-1-base"
-                    title="Male"
+                    title={profileData.gender}
                   />
                 )}
-                {profileData.gender === 'female' && (
+                {profileData.gender === 'Female' && (
                   <IoMdFemale
                     className="font-bold font-clash text-3xl text-btext-1-base"
-                    title="Female"
+                    title={profileData.gender}
                   />
                 )}
               </div>
@@ -274,14 +294,14 @@ function UserProfile() {
 
                   <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div className="w-full sm:w-1/2">
-                      <BodyBase extraClass="pl-2">Organization</BodyBase>
+                      <BodyBase extraClass="pl-2">Phone</BodyBase>
                       <input
                         className="mt-1 w-full rounded-md border border-borderPrimary py-2 px-3 dark:text-white"
-                        value={profileData.organization || ''}
+                        value={profileData.phone_number || ''}
                         onChange={(e) =>
                           setProfileData((prev) => ({
                             ...prev,
-                            organization: e.target.value,
+                            phone_number: e.target.value,
                           }))
                         }
                       />
@@ -302,20 +322,7 @@ function UserProfile() {
                   </div>
 
                   <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="w-full sm:w-1/2">
-                      <BodyBase extraClass="pl-2">Phone</BodyBase>
-                      <input
-                        className="mt-1 w-full rounded-md border border-borderPrimary py-2 px-3 dark:text-white"
-                        value={profileData.phone_number || ''}
-                        onChange={(e) =>
-                          setProfileData((prev) => ({
-                            ...prev,
-                            phone_number: e.target.value,
-                          }))
-                        }
-                      />
-                    </div>
-                    <div className="w-full sm:w-1/2">
+                    <div className="w-full">
                       <BodyBase extraClass="pl-2">Address</BodyBase>
                       <input
                         className="mt-1 w-full rounded-md border border-borderPrimary py-2 px-3 dark:text-white"
@@ -346,16 +353,20 @@ function UserProfile() {
                     <RoundedButton
                       label="Cancel"
                       onClick={() => setEditModuleOpen(false)}
-                      bg="bg-white"
-                      border="border border-borderPrimary"
-                      textColor="text-paragraph"
+                      bg="bg-btext-1-base"
+                      textColor="text-white"
                       width="w-max"
                       padding="px-6 py-2.5"
                     />
-                    <PrimaryButton
+
+                    <RoundedButton
                       label={isEditing ? 'Saving…' : 'Save'}
                       type="submit"
                       disabled={isEditing}
+                      bg="bg-btext-1-base"
+                      textColor="text-white"
+                      width="w-max"
+                      padding="px-6 py-2.5"
                     />
                   </div>
                 </form>

@@ -4,6 +4,11 @@ import BodyBase from '../../components/text/BodyBase';
 import { GoDotFill } from 'react-icons/go';
 import BodySmall from '../../components/text/BodySmall';
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { addToCart, removeFromCart } from '@/features/cart/cartSlice';
+import RoundedButton from '@/components/buttons/RoundedButton';
+
 const sections = ['overview', 'updates', 'location', 'asset-type', 'strategy', 'funds'];
 function handleClick(id) {
   document.getElementById(id)?.scrollIntoView({
@@ -12,18 +17,56 @@ function handleClick(id) {
 }
 function ProductDetailsHero({ projectData }) {
   const [activeSection, setActiveSection] = useState('overview');
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const cart = useSelector((state) => state.cart.items);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const isInCart = cart.some((item) => item.id === projectData?.id);
+
+  const handleButtonClick = () => {
+    if (!isLoggedIn) {
+      navigate('/auth/login');
+    } else if (isInCart) {
+      dispatch(removeFromCart(projectData.id));
+    } else {
+      dispatch(addToCart(projectData));
+    }
+  };
+
   return (
     <SectionLayout>
-      <div className="flex items-center justify-normal gap-5">
-        <SubTitle>{projectData?.name}</SubTitle>
-        <div className="flex items-center gap-1">
-          <GoDotFill className="text-lg text-bg-blush-mist-dark" />
-          <BodySmall>{projectData?.status}</BodySmall>
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          {' '}
+          <div className="flex items-center justify-normal gap-5">
+            <SubTitle>{projectData?.name}</SubTitle>
+            <div className="flex items-center gap-1">
+              <GoDotFill className="text-lg text-bg-blush-mist-dark" />
+              <BodySmall>{projectData?.status}</BodySmall>
+            </div>
+          </div>
+          <BodyBase textColor={`text-sub-heading`} extraClass={`mt-[6px]`}>
+            {projectData?.company_name}
+          </BodyBase>
+        </div>
+        <div className="">
+          <RoundedButton
+            label={!isLoggedIn ? 'Sign In' : isInCart ? '🗑️ Remove from Cart' : '+ Add to Cart'}
+            onClick={handleButtonClick}
+            width="w-64"
+            rounded="rounded-md"
+            textSize="text-sm"
+            bg={
+              !isLoggedIn
+                ? 'bg-bg-dusky-plum-base'
+                : isInCart
+                  ? 'bg-red-500'
+                  : 'bg-bg-dusky-plum-base'
+            }
+          />
         </div>
       </div>
-      <BodyBase textColor={`text-sub-heading`} extraClass={`mt-[6px]`}>
-        {projectData?.company_name}
-      </BodyBase>
       <div className="flex items-center justify-normal mt-8 overflow-x-auto border-b border-b-border-primary">
         {sections.map((item, index) => (
           <div

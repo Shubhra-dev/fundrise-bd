@@ -30,3 +30,22 @@ export async function getInvestProjects({
 export async function postInvestmentRequest(payload) {
   return await securePost(`${BASE_URL}/investor-panel/investment/requests`, payload);
 }
+export async function getBrowseInvests({
+  orderType = '',
+  searchValue = '',
+  perPage = 5,
+  page = '',
+  orderColumn = '',
+  status = 'Active',
+} = {}) {
+  const params = new URLSearchParams({
+    search_value: searchValue,
+    per_page: perPage,
+    page: page,
+    order_column: orderColumn,
+    order_type: orderType,
+    status: status,
+  });
+
+  return await secureGet(`${BASE_URL}/investor-panel/browse-invests?${params.toString()}`);
+}

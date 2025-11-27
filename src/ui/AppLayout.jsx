@@ -4,6 +4,7 @@ import Header from './Header';
 import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import Footer from './Footer';
+import FloatingSelectionTray from '@/components/cart/FloatingSelectionTray';
 
 function AppLayout() {
   const location = useLocation();
@@ -25,6 +26,7 @@ function AppLayout() {
         <Outlet />
       </div>
       <Footer />
+      <FloatingSelectionTray />
     </div>
   );
 }

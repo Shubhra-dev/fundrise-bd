@@ -29,6 +29,7 @@ import UserProfile from '@/pages/user-profile/UserProfile';
 import UserSettings from '@/pages/user-settings/UserSettings';
 import UserFlowDiagram from '@/pages/private-credit/my-forest-user-flows';
 import FlowchartViewer from '@/pages/private-credit/my-forest-flowcharts';
+import UserLayout from './ui/UserLayout';
 
 const router = createBrowserRouter([
   {
@@ -54,90 +55,99 @@ const router = createBrowserRouter([
   {
     element: (
       <ProtectedRoute>
-        <UserDashboard />
+        <UserLayout />
       </ProtectedRoute>
     ),
-    path: '/user/dashboard',
-  },
-  {
-    element: (
-      <ProtectedRoute>
-        <UserPortfolio />
-      </ProtectedRoute>
-    ),
-    path: '/user/portfolio',
-  },
-  {
-    element: (
-      <ProtectedRoute>
-        <UserInvests />
-      </ProtectedRoute>
-    ),
-    path: '/user/invests',
-  },
-  {
-    element: (
-      <ProtectedRoute>
-        <UserTransaction />
-      </ProtectedRoute>
-    ),
-    path: '/user/transactions',
-  },
-  {
-    element: (
-      <ProtectedRoute>
-        <UserSupport />
-      </ProtectedRoute>
-    ),
-    path: '/user/support',
-  },
-  {
-    element: (
-      <ProtectedRoute>
-        <UserProfile />
-      </ProtectedRoute>
-    ),
-    path: '/user/profile',
-  },
-  {
-    element: (
-      <ProtectedRoute>
-        <UserSettings />
-      </ProtectedRoute>
-    ),
-    path: '/user/settings',
-  },
-  {
-    element: (
-      <ProtectedRoute>
-        <UserNewsFeed />
-      </ProtectedRoute>
-    ),
-    path: '/user/newsfeed',
-  },
-  {
-    element: (
-      <ProtectedRoute>
-        <Calculator />
-      </ProtectedRoute>
-    ),
-    path: '/user/calculator',
-  },
-  {
-    element: (
-      <ProtectedRoute>
-        <BrowseInvests />
-      </ProtectedRoute>
-    ),
-    path: '/user/browse-invests',
-  },
-  {
-    element: (
-      <ProtectedRoute>
-        <InvestmentDetails />
-      </ProtectedRoute>
-    ),
-    path: '/user/browse-invests/details/:invest_id',
+    children: [
+      {
+        element: (
+          <ProtectedRoute>
+            <UserDashboard />
+          </ProtectedRoute>
+        ),
+        path: '/user/dashboard',
+      },
+      {
+        element: (
+          <ProtectedRoute>
+            <UserPortfolio />
+          </ProtectedRoute>
+        ),
+        path: '/user/portfolio',
+      },
+      {
+        element: (
+          <ProtectedRoute>
+            <UserInvests />
+          </ProtectedRoute>
+        ),
+        path: '/user/invests',
+      },
+      {
+        element: (
+          <ProtectedRoute>
+            <UserTransaction />
+          </ProtectedRoute>
+        ),
+        path: '/user/transactions',
+      },
+      {
+        element: (
+          <ProtectedRoute>
+            <UserSupport />
+          </ProtectedRoute>
+        ),
+        path: '/user/support',
+      },
+      {
+        element: (
+          <ProtectedRoute>
+            <UserProfile />
+          </ProtectedRoute>
+        ),
+        path: '/user/profile',
+      },
+      {
+        element: (
+          <ProtectedRoute>
+            <UserSettings />
+          </ProtectedRoute>
+        ),
+        path: '/user/settings',
+      },
+      {
+        element: (
+          <ProtectedRoute>
+            <UserNewsFeed />
+          </ProtectedRoute>
+        ),
+        path: '/user/newsfeed',
+      },
+      {
+        element: (
+          <ProtectedRoute>
+            <Calculator />
+          </ProtectedRoute>
+        ),
+        path: '/user/calculator',
+      },
+      {
+        element: (
+          <ProtectedRoute>
+            <BrowseInvests />
+          </ProtectedRoute>
+        ),
+        path: '/user/browse-invests',
+      },
+      {
+        element: (
+          <ProtectedRoute>
+            <InvestmentDetails />
+          </ProtectedRoute>
+        ),
+        path: '/user/browse-invests/details/:slug',
+      },
+    ],
   },
 ]);
 
